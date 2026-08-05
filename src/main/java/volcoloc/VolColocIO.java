@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.measure.ResultsTable;
 
 import java.io.File;
@@ -95,7 +97,7 @@ public final class VolColocIO {
                                         File multi, String prefix) throws IOException {
         if (result.getParameters().isIncludePerObjectTables()
                 || result.getParameters().isIncludePartnerDetails()) {
-            for (VolColocResult.DirectionResult direction : result.getDirectionResults()) {
+            for (OverlapResult.DirectionResult direction : result.getDirectionResults()) {
                 String directionName = channelFileName(
                         direction.getSourceIndex(),
                         direction.getSourceChannel())
@@ -116,7 +118,7 @@ public final class VolColocIO {
             saveTable(result.getSummaryTable(), objects, prefix + "_Summary.csv");
         }
         if (!result.getMultiChannelResults().isEmpty()) {
-            for (VolColocResult.MultiChannelResult channel
+            for (OverlapResult.MultiChannelResult channel
                     : result.getMultiChannelResults()) {
                 saveTable(result.getMultiPerObjectTable(channel), multi,
                         prefix + "_" + channelFileName(
@@ -128,7 +130,7 @@ public final class VolColocIO {
                     prefix + "_Multi_Summary.csv");
         }
         if (!result.getBoundingBoxDirectionResults().isEmpty()) {
-            for (VolColocResult.BoundingBoxDirectionResult direction
+            for (OverlapResult.BoundingBoxDirectionResult direction
                     : result.getBoundingBoxDirectionResults()) {
                 String directionName = channelFileName(
                         direction.getSourceIndex(),

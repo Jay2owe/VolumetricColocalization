@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.MultiTargetSummary;
+
 import ij.ImagePlus;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
@@ -38,7 +40,7 @@ public class VolColocIOTest {
     public void writesCsvAsUtf8RegardlessOfPlatformCharset() throws Exception {
         ResultsTable table = new ResultsTable();
         table.incrementCounter();
-        table.addValue("Pattern", VolColocAnalysis.ANY_PATTERN);
+        table.addValue("Pattern", MultiTargetSummary.ANY_PATTERN);
         table.addValue("Unit", "µm^3");
         File directory = temporary.newFolder("utf8");
 
@@ -47,7 +49,7 @@ public class VolColocIOTest {
         byte[] bytes = read(new File(directory, "encoding.csv"));
         String text = new String(bytes, "UTF-8");
         assertTrue("em dash must survive as UTF-8",
-                text.contains(VolColocAnalysis.ANY_PATTERN));
+                text.contains(MultiTargetSummary.ANY_PATTERN));
         assertTrue("micro sign must survive as UTF-8", text.contains("µm^3"));
         assertTrue("em dash must be the 3-byte UTF-8 sequence",
                 indexOf(bytes, new byte[]{(byte) 0xe2, (byte) 0x80, (byte) 0x94}) >= 0);

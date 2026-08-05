@@ -8,6 +8,10 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.MultiTargetSummary;
+
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
@@ -602,11 +606,11 @@ public final class VolColocBatchRunner {
     private static void appendMultiSummary(
             ResultsTable aggregate, VolColocResult result,
             String folder, String group) {
-        for (VolColocResult.MultiChannelResult multi
+        for (OverlapResult.MultiChannelResult multi
                 : result.getMultiChannelResults()) {
             String targets = targetSet(
                     result.getChannelNames(), multi.getSourceIndex());
-            for (VolColocResult.PatternSummary pattern
+            for (OverlapResult.PatternSummary pattern
                     : multi.getPatterns()) {
                 int row = aggregate.getCounter();
                 aggregate.incrementCounter();
@@ -714,7 +718,7 @@ public final class VolColocBatchRunner {
             Integer previousPattern = patternCounts.get(patternKey);
             patternCounts.put(patternKey, Integer.valueOf(
                     (previousPattern == null ? 0 : previousPattern.intValue()) + count));
-            if (!VolColocAnalysis.ANY_PATTERN.equals(pattern)) {
+            if (!MultiTargetSummary.ANY_PATTERN.equals(pattern)) {
                 Integer previousTotal = sourceTotals.get(sourceKey);
                 sourceTotals.put(sourceKey, Integer.valueOf(
                         (previousTotal == null ? 0 : previousTotal.intValue()) + count));
@@ -745,9 +749,9 @@ public final class VolColocBatchRunner {
             String any = null;
             for (String patternKey : group.getValue()) {
                 String pattern = metadata.get(patternKey)[3];
-                if (VolColocAnalysis.NO_HITS_PATTERN.equals(pattern)) {
+                if (MultiTargetSummary.NO_HITS_PATTERN.equals(pattern)) {
                     noHits = patternKey;
-                } else if (VolColocAnalysis.ANY_PATTERN.equals(pattern)) {
+                } else if (MultiTargetSummary.ANY_PATTERN.equals(pattern)) {
                     any = patternKey;
                 } else {
                     ordered.add(patternKey);

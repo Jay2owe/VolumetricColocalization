@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;
@@ -35,11 +37,11 @@ public class VolColocTest {
                         .build());
 
         assertEquals(2, result.getDirectionResults().size());
-        VolColocResult.DirectionResult aToB = result.getDirectionResults().get(0);
+        OverlapResult.DirectionResult aToB = result.getDirectionResults().get(0);
         assertEquals("A", aToB.getSourceChannel());
         assertEquals(2, aToB.getObjects().size());
 
-        VolColocResult.ObjectResult a1 = aToB.getObjects().get(0);
+        OverlapResult.ObjectResult a1 = aToB.getObjects().get(0);
         assertEquals(1, a1.getSourceLabel());
         assertEquals(3, a1.getOverlapVoxels());
         assertEquals(75.0, a1.getOverlapPercent(), 0.0001);
@@ -48,7 +50,7 @@ public class VolColocTest {
         assertEquals(2, a1.getPartnerCount());
         assertTrue(a1.isColocalized());
 
-        VolColocResult.ObjectResult a2 = aToB.getObjects().get(1);
+        OverlapResult.ObjectResult a2 = aToB.getObjects().get(1);
         assertEquals(50.0, a2.getOverlapPercent(), 0.0001);
         assertFalse(a2.isColocalized());
         assertEquals(3, aToB.getPartnerDetails().size());
@@ -66,7 +68,7 @@ public class VolColocTest {
                         .minimumDetailOverlapPercent(50.0)
                         .build());
 
-        VolColocResult.DirectionResult aToB = result.getDirectionResults().get(0);
+        OverlapResult.DirectionResult aToB = result.getDirectionResults().get(0);
         assertEquals(2, aToB.getPartnerDetails().size());
         assertEquals(3, aToB.getObjects().get(0).getOverlapVoxels());
         assertEquals(2, aToB.getObjects().get(0).getPartnerCount());
@@ -84,7 +86,7 @@ public class VolColocTest {
                         .build());
 
         assertEquals(3, result.getMultiChannelResults().size());
-        VolColocResult.MultiChannelResult multiA =
+        OverlapResult.MultiChannelResult multiA =
                 result.getMultiChannelResults().get(0);
         assertEquals("B", multiA.getObjects().get(0).getPattern());
         assertEquals("B", multiA.getPatterns().get(0).getPattern());
@@ -130,7 +132,7 @@ public class VolColocTest {
 
         VolColocResult result = VolColoc.run(
                 Arrays.asList(source, none, separator));
-        VolColocResult.MultiChannelResult multi =
+        OverlapResult.MultiChannelResult multi =
                 result.getMultiChannelResults().get(0);
 
         assertEquals("\"None\"", multi.getObjects().get(0).getPattern());
@@ -176,9 +178,9 @@ public class VolColocTest {
                         .build());
 
         assertEquals(2, result.getBoundingBoxDirectionResults().size());
-        VolColocResult.BoundingBoxDirectionResult aToB =
+        OverlapResult.BoundingBoxDirectionResult aToB =
                 result.getBoundingBoxDirectionResults().get(0);
-        VolColocResult.BoundingBoxObjectResult a1 =
+        OverlapResult.BoundingBoxObjectResult a1 =
                 aToB.getObjects().get(0);
         assertEquals(9, a1.getBoxVolume());
         assertEquals(4.0 / 9.0 * 100.0,
@@ -208,7 +210,7 @@ public class VolColocTest {
         calibration.setUnit("um");
         a.setCalibration(calibration);
 
-        VolColocResult.ObjectResult object = VolColoc.run(a, b)
+        OverlapResult.ObjectResult object = VolColoc.run(a, b)
                 .getDirectionResults().get(0).getObjects().get(0);
         assertEquals(1.0, object.getSourceVolume(), 0.0001);
         assertEquals("\u00b5m^3", object.getVolumeUnit());
@@ -245,16 +247,16 @@ public class VolColocTest {
     }
 
     private static int patternCount(
-            VolColocResult.MultiChannelResult result, String pattern) {
-        for (VolColocResult.PatternSummary row : result.getPatterns()) {
+            OverlapResult.MultiChannelResult result, String pattern) {
+        for (OverlapResult.PatternSummary row : result.getPatterns()) {
             if (pattern.equals(row.getPattern())) return row.getObjectCount();
         }
         return -1;
     }
 
     private static double patternPercent(
-            VolColocResult.MultiChannelResult result, String pattern) {
-        for (VolColocResult.PatternSummary row : result.getPatterns()) {
+            OverlapResult.MultiChannelResult result, String pattern) {
+        for (OverlapResult.PatternSummary row : result.getPatterns()) {
             if (pattern.equals(row.getPattern())) return row.getObjectPercent();
         }
         return Double.NaN;

@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.ImagePlus;
 import ij.gui.OvalRoi;
 import ij.gui.PointRoi;
@@ -129,7 +131,7 @@ public class VolColocRoiFileTest {
         ImagePlus b = VolColocLabelImages.fromRoiSetFile(
                 reference, second.getAbsolutePath());
 
-        VolColocResult.DirectionResult aToB =
+        OverlapResult.DirectionResult aToB =
                 VolColoc.run(a, b).getDirectionResults().get(0);
         // 4x4 source, 2x2 partner fully inside it: 4 of 16 voxels.
         assertEquals(16, aToB.getObjects().get(0).getSourceVoxels());

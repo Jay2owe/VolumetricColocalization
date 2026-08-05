@@ -19,10 +19,16 @@ import java.util.List;
  */
 public final class VolColocParameters {
 
-    public static final int MIN_IMAGES = 2;
-    public static final int MAX_IMAGES = 5;
-    public static final double DEFAULT_THRESHOLD_PERCENT = 30.0;
-    public static final double DEFAULT_BOUNDING_BOX_THRESHOLD_PERCENT = 30.0;
+    // Sourced from the engine rather than restated, so the dialog's defaults
+    // and the engine's cannot drift apart.
+    public static final int MIN_IMAGES =
+            sc.fiji.volcoloc.core.OverlapParameters.MIN_IMAGES;
+    public static final int MAX_IMAGES =
+            sc.fiji.volcoloc.core.OverlapParameters.MAX_IMAGES;
+    public static final double DEFAULT_THRESHOLD_PERCENT =
+            sc.fiji.volcoloc.core.OverlapParameters.DEFAULT_THRESHOLD_PERCENT;
+    public static final double DEFAULT_BOUNDING_BOX_THRESHOLD_PERCENT =
+            sc.fiji.volcoloc.core.OverlapParameters.DEFAULT_BOUNDING_BOX_THRESHOLD_PERCENT;
 
     private final List<ImagePlus> images;
     private final List<String> channelNames;
@@ -137,6 +143,30 @@ public final class VolColocParameters {
         return includeBoundingBoxOverlap
                 || includeBoundingBoxCpc
                 || includeBoundingBoxVolumeFill;
+    }
+
+    /**
+     * The engine's view of these parameters.
+     *
+     * <p>{@link #isIncludePerObjectTables()} and {@link #isIncludeSummaryTable()}
+     * are deliberately absent: they decide which windows this plugin opens and
+     * the engine has never read them. Everything else crosses unchanged, and
+     * the constants above are the core's own, so the defaults cannot drift
+     * apart.
+     */
+    sc.fiji.volcoloc.core.OverlapParameters toCoreParameters() {
+        return sc.fiji.volcoloc.core.OverlapParameters.builder(images)
+                .channelNames(channelNames)
+                .thresholdsPercent(thresholdsPercent)
+                .boundingBoxThresholdsPercent(boundingBoxThresholdsPercent)
+                .bidirectional(bidirectional)
+                .includePartnerDetails(includePartnerDetails)
+                .includeMultiColocalization(includeMultiColocalization)
+                .minimumDetailOverlapPercent(minimumDetailOverlapPercent)
+                .includeBoundingBoxOverlap(includeBoundingBoxOverlap)
+                .includeBoundingBoxCpc(includeBoundingBoxCpc)
+                .includeBoundingBoxVolumeFill(includeBoundingBoxVolumeFill)
+                .build();
     }
 
     private static <T> List<T> immutableCopy(List<T> source) {

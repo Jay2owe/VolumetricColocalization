@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.Macro;
@@ -471,7 +473,7 @@ public class Volumetric_Colocalization implements PlugIn {
     private void display(VolColocResult result) {
         if (result.getParameters().isIncludePerObjectTables()
                 || result.getParameters().isIncludePartnerDetails()) {
-            for (VolColocResult.DirectionResult direction
+            for (OverlapResult.DirectionResult direction
                     : result.getDirectionResults()) {
                 String suffix = direction.getSourceChannel()
                         + " in " + direction.getTargetChannel();
@@ -489,7 +491,7 @@ public class Volumetric_Colocalization implements PlugIn {
             result.getSummaryTable().show(TITLE + " - Summary");
         }
         if (!result.getMultiChannelResults().isEmpty()) {
-            for (VolColocResult.MultiChannelResult channel
+            for (OverlapResult.MultiChannelResult channel
                     : result.getMultiChannelResults()) {
                 result.getMultiPerObjectTable(channel).show(
                         TITLE + " - Multi - " + channel.getSourceChannel());
@@ -497,7 +499,7 @@ public class Volumetric_Colocalization implements PlugIn {
             result.getMultiSummaryTable().show(TITLE + " - Multi Summary");
         }
         if (!result.getBoundingBoxDirectionResults().isEmpty()) {
-            for (VolColocResult.BoundingBoxDirectionResult direction
+            for (OverlapResult.BoundingBoxDirectionResult direction
                     : result.getBoundingBoxDirectionResults()) {
                 result.getBoundingBoxTable(direction).show(
                         TITLE + " - Bounding Boxes - "

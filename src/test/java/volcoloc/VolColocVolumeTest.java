@@ -8,6 +8,10 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.MultiTargetSummary;
+
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;
@@ -43,16 +47,16 @@ public class VolColocVolumeTest {
 
         VolColocResult result = VolColoc.run(a, b);
 
-        VolColocResult.DirectionResult aToB = result.getDirectionResults().get(0);
-        VolColocResult.ObjectResult a1 = aToB.getObjects().get(0);
+        OverlapResult.DirectionResult aToB = result.getDirectionResults().get(0);
+        OverlapResult.ObjectResult a1 = aToB.getObjects().get(0);
         assertEquals(3, a1.getSourceVoxels());
         assertEquals(1, a1.getOverlapVoxels());
         assertEquals(100.0 / 3.0, a1.getOverlapPercent(), 0.0001);
         assertEquals(7, a1.getBestPartnerLabel());
 
         // The reverse direction uses B's volume as the denominator: 1/2.
-        VolColocResult.DirectionResult bToA = result.getDirectionResults().get(1);
-        VolColocResult.ObjectResult b7 = bToA.getObjects().get(0);
+        OverlapResult.DirectionResult bToA = result.getDirectionResults().get(1);
+        OverlapResult.ObjectResult b7 = bToA.getObjects().get(0);
         assertEquals(2, b7.getSourceVoxels());
         assertEquals(1, b7.getOverlapVoxels());
         assertEquals(50.0, b7.getOverlapPercent(), 0.0001);
@@ -69,7 +73,7 @@ public class VolColocVolumeTest {
         calibration.setUnit("um");
         a.setCalibration(calibration);
 
-        VolColocResult.DirectionResult aToB =
+        OverlapResult.DirectionResult aToB =
                 VolColoc.run(a, b).getDirectionResults().get(0);
 
         // 3 voxels x (0.5 * 0.5 * 4.0) = 3.0
@@ -91,7 +95,7 @@ public class VolColocVolumeTest {
                         .includeBoundingBoxVolumeFill(true)
                         .build());
 
-        VolColocResult.BoundingBoxObjectResult a1 =
+        OverlapResult.BoundingBoxObjectResult a1 =
                 result.getBoundingBoxDirectionResults().get(0).getObjects().get(0);
         assertEquals(3, a1.getBoxVolume());
         // B's box is 1x1x1 at z=1, fully inside A's box: 1/3 of A's box.
@@ -117,13 +121,13 @@ public class VolColocVolumeTest {
         ImagePlus a = plane("A", sourceRow);
         ImagePlus b = plane("B", partnerRow);
 
-        VolColocResult.DirectionResult aToB = VolColoc.run(
+        OverlapResult.DirectionResult aToB = VolColoc.run(
                 VolColocParameters.builder(a, b)
                         .minimumDetailOverlapPercent(0.0)
                         .build())
                 .getDirectionResults().get(0);
 
-        VolColocResult.ObjectResult a1 = aToB.getObjects().get(0);
+        OverlapResult.ObjectResult a1 = aToB.getObjects().get(0);
         assertEquals(count, a1.getPartnerCount());
         assertEquals(count, a1.getOverlapVoxels());
         assertEquals(100.0, a1.getOverlapPercent(), 0.0001);
@@ -151,7 +155,7 @@ public class VolColocVolumeTest {
                         reference, aggregates);
             }
             int details = 0;
-            for (VolColocResult.DirectionResult direction
+            for (OverlapResult.DirectionResult direction
                     : result.getDirectionResults()) {
                 details += direction.getPartnerDetails().size();
             }
@@ -182,14 +186,14 @@ public class VolColocVolumeTest {
         ImagePlus a = plane("A", 1, 1, 1, 1);
         ImagePlus b = plane("B", 40, 40, 20, 20);
 
-        VolColocResult.ObjectResult first = VolColoc.run(a, b)
+        OverlapResult.ObjectResult first = VolColoc.run(a, b)
                 .getDirectionResults().get(0).getObjects().get(0);
         assertEquals(20, first.getBestPartnerLabel());
         assertEquals(2, first.getBestPartnerOverlapVoxels());
 
         // Reordering the partner labels in the image must not change it.
         ImagePlus reordered = plane("B", 20, 20, 40, 40);
-        VolColocResult.ObjectResult second =
+        OverlapResult.ObjectResult second =
                 VolColoc.run(plane("A", 1, 1, 1, 1), reordered)
                         .getDirectionResults().get(0).getObjects().get(0);
         assertEquals(20, second.getBestPartnerLabel());
@@ -204,21 +208,21 @@ public class VolColocVolumeTest {
         ImagePlus b = plane("B", 7, 7);
         ImagePlus c = plane("C", 8, 8);
 
-        VolColocResult.MultiChannelResult multi = VolColoc.run(
+        OverlapResult.MultiChannelResult multi = VolColoc.run(
                 Arrays.asList(a, b, c)).getMultiChannelResults().get(0);
 
         boolean everythingHit = true;
-        for (VolColocResult.MultiObjectResult object : multi.getObjects()) {
-            if (VolColocAnalysis.NO_HITS_PATTERN.equals(object.getPattern())) {
+        for (OverlapResult.MultiObjectResult object : multi.getObjects()) {
+            if (MultiTargetSummary.NO_HITS_PATTERN.equals(object.getPattern())) {
                 everythingHit = false;
             }
         }
         assertTrue("test setup: every object should be colocalized",
                 everythingHit);
 
-        VolColocResult.PatternSummary none = null;
-        for (VolColocResult.PatternSummary pattern : multi.getPatterns()) {
-            if (VolColocAnalysis.NO_HITS_PATTERN.equals(pattern.getPattern())) {
+        OverlapResult.PatternSummary none = null;
+        for (OverlapResult.PatternSummary pattern : multi.getPatterns()) {
+            if (MultiTargetSummary.NO_HITS_PATTERN.equals(pattern.getPattern())) {
                 none = pattern;
             }
         }
@@ -229,20 +233,20 @@ public class VolColocVolumeTest {
     @Test
     public void escapesTheAnyPatternWhenUsedAsAChannelName() {
         ImagePlus source = plane("Source", 1, 2);
-        ImagePlus any = plane(VolColocAnalysis.ANY_PATTERN, 10, 0);
+        ImagePlus any = plane(MultiTargetSummary.ANY_PATTERN, 10, 0);
         ImagePlus other = plane("Other", 0, 30);
 
-        VolColocResult.MultiChannelResult multi = VolColoc.run(
+        OverlapResult.MultiChannelResult multi = VolColoc.run(
                 Arrays.asList(source, any, other)).getMultiChannelResults().get(0);
 
-        assertEquals("\"" + VolColocAnalysis.ANY_PATTERN + "\"",
+        assertEquals("\"" + MultiTargetSummary.ANY_PATTERN + "\"",
                 multi.getObjects().get(0).getPattern());
         // The escaped channel name stays distinct from the totals row.
         int totals = 0;
         int escaped = 0;
-        for (VolColocResult.PatternSummary pattern : multi.getPatterns()) {
-            if (VolColocAnalysis.ANY_PATTERN.equals(pattern.getPattern())) totals++;
-            if (("\"" + VolColocAnalysis.ANY_PATTERN + "\"")
+        for (OverlapResult.PatternSummary pattern : multi.getPatterns()) {
+            if (MultiTargetSummary.ANY_PATTERN.equals(pattern.getPattern())) totals++;
+            if (("\"" + MultiTargetSummary.ANY_PATTERN + "\"")
                     .equals(pattern.getPattern())) escaped++;
         }
         assertEquals(1, totals);
@@ -303,7 +307,7 @@ public class VolColocVolumeTest {
         ImagePlus image = new ImagePlus("indexed", indexed);
         image.setTypeToColor256();
 
-        VolColocResult.DirectionResult direction = VolColoc.run(
+        OverlapResult.DirectionResult direction = VolColoc.run(
                 image, plane("B", 9, 9, 0, 0)).getDirectionResults().get(0);
 
         assertEquals(3, direction.getObjects().size());
@@ -410,19 +414,19 @@ public class VolColocVolumeTest {
         List<String> names = Arrays.asList("A", "B", "C");
         List<Double> thresholds = Arrays.asList(30.0, 30.0, 30.0);
 
-        VolColocParameters parameters =
-                VolColocParameters.builder(Arrays.asList(a, b, c)).build();
-        VolColocAnalysis analysis = new VolColocAnalysis(
-                parameters, names, thresholds, thresholds);
-        VolColocResult result = analysis.run();
+        VolColocResult result = VolColoc.run(
+                VolColocParameters.builder(Arrays.asList(a, b, c)).build());
 
         // Three channels give six ordered pairs. Bidirectional output needs all
-        // six and multi-colocalization needs the same six, so a cache miss on
-        // reuse would show up here as twelve.
-        assertEquals(6, analysis.getDirectionBuilds());
+        // six and multi-colocalization needs the same six.
+        //
+        // The build count itself is no longer observable from here — the cache
+        // lives in the engine, and this asserts the shape it produces. The
+        // "built at most once" property is asserted directly by
+        // sc.fiji.volcoloc.core.DirectionalPairRunnerTest.
         assertEquals(6, result.getDirectionResults().size());
         assertEquals(3, result.getMultiChannelResults().size());
-        for (VolColocResult.DirectionResult direction
+        for (OverlapResult.DirectionResult direction
                 : result.getDirectionResults()) {
             assertFalse(direction.getObjects().isEmpty());
         }
@@ -435,17 +439,13 @@ public class VolColocVolumeTest {
                                 plane("C", 3, 3, 0)))
                 .bidirectional(false)
                 .build();
-        List<String> names = Arrays.asList("A", "B", "C");
-        List<Double> thresholds = Arrays.asList(30.0, 30.0, 30.0);
-
-        VolColocAnalysis analysis = new VolColocAnalysis(
-                parameters, names, thresholds, thresholds);
-        VolColocResult result = analysis.run();
+        VolColocResult result = VolColoc.run(parameters);
 
         // Only three directions are reported, but multi-colocalization still
-        // needs all six ordered pairs; none may be built twice.
+        // anchors on all three channels. That the six ordered pairs behind it
+        // are each built once is asserted in the core's own test.
         assertEquals(3, result.getDirectionResults().size());
-        assertEquals(6, analysis.getDirectionBuilds());
+        assertEquals(3, result.getMultiChannelResults().size());
     }
 
     @Test
@@ -462,7 +462,7 @@ public class VolColocVolumeTest {
                         .thresholdsPercent(Arrays.asList(10.0, 40.0, 70.0))
                         .build());
 
-        for (VolColocResult.DirectionResult direction
+        for (OverlapResult.DirectionResult direction
                 : cached.getDirectionResults()) {
             // Recompute this one direction on its own, with no other pair in
             // play, and require an identical answer.
@@ -474,13 +474,13 @@ public class VolColocVolumeTest {
                                     direction.getThresholdPercent(), 30.0))
                             .bidirectional(false)
                             .build());
-            VolColocResult.DirectionResult reference =
+            OverlapResult.DirectionResult reference =
                     isolated.getDirectionResults().get(0);
             assertEquals(reference.getObjects().size(),
                     direction.getObjects().size());
             for (int i = 0; i < reference.getObjects().size(); i++) {
-                VolColocResult.ObjectResult expected = reference.getObjects().get(i);
-                VolColocResult.ObjectResult actual = direction.getObjects().get(i);
+                OverlapResult.ObjectResult expected = reference.getObjects().get(i);
+                OverlapResult.ObjectResult actual = direction.getObjects().get(i);
                 assertEquals(expected.getSourceLabel(), actual.getSourceLabel());
                 assertEquals(expected.getOverlapVoxels(), actual.getOverlapVoxels());
                 assertEquals(expected.getOverlapPercent(),
@@ -495,11 +495,11 @@ public class VolColocVolumeTest {
 
     private static String serializeAggregates(VolColocResult result) {
         StringBuilder text = new StringBuilder();
-        for (VolColocResult.DirectionResult direction
+        for (OverlapResult.DirectionResult direction
                 : result.getDirectionResults()) {
             text.append(direction.getSourceChannel()).append("->")
                     .append(direction.getTargetChannel()).append('\n');
-            for (VolColocResult.ObjectResult object : direction.getObjects()) {
+            for (OverlapResult.ObjectResult object : direction.getObjects()) {
                 text.append(object.getSourceLabel()).append('|')
                         .append(object.getSourceVoxels()).append('|')
                         .append(object.getOverlapVoxels()).append('|')
@@ -509,21 +509,21 @@ public class VolColocVolumeTest {
                         .append(object.getPartnerCount()).append('|')
                         .append(object.isColocalized()).append('\n');
             }
-            VolColocResult.Summary summary = direction.getSummary();
+            OverlapResult.Summary summary = direction.getSummary();
             text.append("summary|").append(summary.getObjectCount()).append('|')
                     .append(summary.getMeanOverlapPercent()).append('|')
                     .append(summary.getMedianOverlapPercent()).append('|')
                     .append(summary.getColocalizedCount()).append('|')
                     .append(summary.getColocalizedPercent()).append('\n');
         }
-        for (VolColocResult.MultiChannelResult multi
+        for (OverlapResult.MultiChannelResult multi
                 : result.getMultiChannelResults()) {
             text.append("multi ").append(multi.getSourceChannel()).append('\n');
-            for (VolColocResult.MultiObjectResult object : multi.getObjects()) {
+            for (OverlapResult.MultiObjectResult object : multi.getObjects()) {
                 text.append(object.getSourceLabel()).append('|')
                         .append(object.getPattern()).append('\n');
             }
-            for (VolColocResult.PatternSummary pattern : multi.getPatterns()) {
+            for (OverlapResult.PatternSummary pattern : multi.getPatterns()) {
                 text.append(pattern.getPattern()).append('|')
                         .append(pattern.getObjectCount()).append('|')
                         .append(pattern.getObjectPercent()).append('\n');

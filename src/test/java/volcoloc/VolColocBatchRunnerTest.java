@@ -8,6 +8,8 @@
  */
 package volcoloc;
 
+import sc.fiji.volcoloc.core.MultiTargetSummary;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
@@ -303,16 +305,16 @@ public class VolColocBatchRunnerTest {
                         finishedSources.put(sourceKey, Boolean.TRUE));
                 if (currentSource != null) {
                     assertEquals("previous block must end with — Any —",
-                            VolColocAnalysis.ANY_PATTERN,
+                            MultiTargetSummary.ANY_PATTERN,
                             multi.getStringValue("Pattern", row - 1));
                     assertEquals("None must sit just before — Any —",
-                            VolColocAnalysis.NO_HITS_PATTERN,
+                            MultiTargetSummary.NO_HITS_PATTERN,
                             multi.getStringValue("Pattern", row - 2));
                 }
                 currentSource = sourceKey;
                 nonAnyTotal = 0;
             }
-            if (!VolColocAnalysis.ANY_PATTERN.equals(pattern)) {
+            if (!MultiTargetSummary.ANY_PATTERN.equals(pattern)) {
                 nonAnyTotal += (int) Math.round(multi.getValue("Count", row));
             } else {
                 // Every source object is counted by exactly one non-total
@@ -328,9 +330,9 @@ public class VolColocBatchRunnerTest {
                         percent, 0.005);
             }
         }
-        assertEquals(VolColocAnalysis.ANY_PATTERN,
+        assertEquals(MultiTargetSummary.ANY_PATTERN,
                 multi.getStringValue("Pattern", multi.getCounter() - 1));
-        assertEquals(VolColocAnalysis.NO_HITS_PATTERN,
+        assertEquals(MultiTargetSummary.NO_HITS_PATTERN,
                 multi.getStringValue("Pattern", multi.getCounter() - 2));
     }
 

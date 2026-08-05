@@ -105,23 +105,17 @@
 		</dependency>
 
 		<!--
-		  TEST SCOPE ONLY, and deliberately so.
+		  The engine. Shaded into this jar, relocated, and never installed by
+		  the user as a separate artifact — see the shade plugin below.
 
-		  The extracted engine is diffed against this plugin's own engine by
-		  volcoloc.equivalence.EngineEquivalenceTest. Nothing in src/main links
-		  it yet, so the shipped jar is unchanged and the two engines stay
-		  independently observable — which is the whole point of the gate.
-
-		  It becomes a compile dependency at migration Stage 2, when
-		  VolColocAnalysis is deleted and VolColocResult becomes a table
-		  adapter over the core model. Do not promote it before the gate is
-		  green.
+		  Compile scope but NOT `provided`: the class files must end up inside
+		  the shipped jar, because a bare Fiji has never heard of volcoloc-core
+		  and the whole point of the pattern is that it never has to.
 		-->
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>volcoloc-core</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

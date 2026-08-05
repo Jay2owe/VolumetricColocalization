@@ -1,5 +1,7 @@
 package volcoloc;
 
+import sc.fiji.volcoloc.core.OverlapResult;
+
 import ij.ImagePlus;
 import ij.process.ShortProcessor;
 import org.junit.Test;
@@ -26,16 +28,16 @@ public class BoundingBoxParallelismTest {
         String previous = System.getProperty("volcoloc.parallelism");
         try {
             System.setProperty("volcoloc.parallelism", "1");
-            List<VolColocResult.BoundingBoxDirectionResult> serial =
+            List<OverlapResult.BoundingBoxDirectionResult> serial =
                     VolColoc.run(parameters).getBoundingBoxDirectionResults();
             System.setProperty("volcoloc.parallelism", "4");
-            List<VolColocResult.BoundingBoxDirectionResult> parallel =
+            List<OverlapResult.BoundingBoxDirectionResult> parallel =
                     VolColoc.run(parameters).getBoundingBoxDirectionResults();
             assertEquals(serial.size(), parallel.size());
             for (int direction = 0; direction < serial.size(); direction++) {
-                List<VolColocResult.BoundingBoxObjectResult> expected =
+                List<OverlapResult.BoundingBoxObjectResult> expected =
                         serial.get(direction).getObjects();
-                List<VolColocResult.BoundingBoxObjectResult> actual =
+                List<OverlapResult.BoundingBoxObjectResult> actual =
                         parallel.get(direction).getObjects();
                 assertEquals(expected.size(), actual.size());
                 for (int row = 0; row < expected.size(); row++) {
@@ -48,8 +50,8 @@ public class BoundingBoxParallelismTest {
     }
 
     private static void assertSameRow(
-            VolColocResult.BoundingBoxObjectResult expected,
-            VolColocResult.BoundingBoxObjectResult actual) {
+            OverlapResult.BoundingBoxObjectResult expected,
+            OverlapResult.BoundingBoxObjectResult actual) {
         assertEquals(expected.getSourceLabel(), actual.getSourceLabel());
         assertEquals(expected.getBoxVolume(), actual.getBoxVolume());
         assertEquals(expected.getBoundingBoxOverlapPercent(),
