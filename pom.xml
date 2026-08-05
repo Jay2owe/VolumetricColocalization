@@ -121,6 +121,59 @@
 
 	<build>
 		<plugins>
+			<!--
+			  Shade volcoloc-core into this jar, relocated.
+
+			  The pattern rule: the user installs ONE jar on a bare Fiji and
+			  never learns a core exists. Relocation is not optional — under
+			  Fiji's flat classloader, two jars carrying the same
+			  fully-qualified class name is a silent-wrong-answer bug, not a
+			  crash, and 3D Objects Counter+ will ship its own copy of this
+			  same engine.
+
+			  Verified before enabling: no Class.forName, no loadClass, no
+			  reflection anywhere in either module, so there are no strings for
+			  relocation to miss. plugins.config names
+			  volcoloc.Volumetric_Colocalization, which is not relocated.
+
+			  artifactSet is an explicit allow-list. net.imagej:ij must never be
+			  bundled: it is what Fiji already is.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>true</createDependencyReducedPom>
+							<artifactSet>
+								<includes>
+									<include>io.github.jay2owe:volcoloc-core</include>
+								</includes>
+							</artifactSet>
+							<relocations>
+								<relocation>
+									<pattern>sc.fiji.volcoloc.core</pattern>
+									<shadedPattern>volcoloc.internal.volcoloc</shadedPattern>
+								</relocation>
+							</relocations>
+							<filters>
+								<filter>
+									<artifact>io.github.jay2owe:volcoloc-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
