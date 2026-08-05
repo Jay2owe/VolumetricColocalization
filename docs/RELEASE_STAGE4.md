@@ -197,6 +197,14 @@ python ~/.claude/skills/imagej-update-site-release/scripts/generate_update_site_
 Then **narrow the generated `--artifact-glob` handling** per the trap above before
 running anything.
 
+**The generated workflow also needs the core checkout steps.** It runs
+`mvn clean test` and `mvn package` on a fresh runner, which cannot resolve
+`oc3d-core` or `volcoloc-core` — they are deliberately on no Maven repository.
+Copy the three checkout steps and the two `mvn install` steps from
+`.github/workflows/build.yml`, and pin `OC3D_CORE_REF` and `VOLCOLOC_CORE_REF`
+to release tags rather than `master`, so the uploaded jar names exactly which
+engine it shaded.
+
 The generated workflow is manual (`workflow_dispatch`), defaults to
 `dry_run=true`, and requires the typed confirmation `UPLOAD Volumetric-Colocalization`
 for a live upload.

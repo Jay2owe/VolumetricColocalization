@@ -4,14 +4,82 @@ on:
   push:
   pull_request:
 
+# The chassis and the engine are embedded into this plugin's jar at build time,
+# relocated under `volcoloc.internal`. They are deliberately not published to
+# any Maven repository and never installed into Fiji as their own jars, so a
+# clean runner cannot resolve them — it has to build them from source first.
+#
+# Pin these to release tags when this plugin is released, so the published jar
+# names exactly which engine it shaded. `master` is only correct while
+# everything here is a SNAPSHOT.
+env:
+  OC3D_CORE_REPO: Jay2owe/oc3d-core
+  OC3D_CORE_REF: master
+  VOLCOLOC_CORE_REPO: Jay2owe/volcoloc-core
+  VOLCOLOC_CORE_REF: master
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Check out the plugin
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Check out oc3d-core
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.OC3D_CORE_REPO }}
+          ref: ${{ env.OC3D_CORE_REF }}
+          path: oc3d-core
+
+      - name: Check out volcoloc-core
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.VOLCOLOC_CORE_REPO }}
+          ref: ${{ env.VOLCOLOC_CORE_REF }}
+          path: volcoloc-core
+
+      # Java 21 builds it; the bytecode target stays at 8, set by pom-scijava.
+      # The shipped classes are major version 52 either way.
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "8"
+          java-version: "21"
           cache: maven
-      - run: ./mvnw --batch-mode clean verify
+
+      # Tests run here rather than being skipped: a core that fails its own
+      # suite must not reach the plugin build and be reported as a plugin
+      # failure. oc3d-core's `oracle` profile stays off, so no GPL artifact
+      # lands on any classpath.
+      - name: Build and install oc3d-core
+        run: mvn --batch-mode --no-transfer-progress -f oc3d-core/pom.xml clean install
+
+      - name: Build and install volcoloc-core
+        run: mvn --batch-mode --no-transfer-progress -f volcoloc-core/pom.xml clean install
+
+      - name: Build and verify the plugin
+        working-directory: plugin
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+
+      # Guards the shading, which is what makes the one-jar install work. A
+      # regression here is silent: the jar still builds and still runs on a
+      # developer machine, and only breaks for users whose Fiji has a sibling
+      # plugin carrying the same classes.
+      - name: Check the shaded jar
+        working-directory: plugin
+        run: |
+          JAR=$(ls target/Volumetric_Colocalization-*.jar \
+                | grep -v -e '-sources\.jar$' -e '-tests\.jar$')
+          echo "Checking $JAR"
+          test "$(unzip -Z1 "$JAR" | grep -c '^sc/fiji/')" -eq 0 \
+            || { echo "FAIL: unrelocated sc/fiji classes in the jar"; exit 1; }
+          test "$(unzip -Z1 "$JAR" | grep -c '^ij/')" -eq 0 \
+            || { echo "FAIL: ImageJ classes bundled into the jar"; exit 1; }
+          unzip -Z1 "$JAR" | grep -q '^plugins.config$' \
+            || { echo "FAIL: plugins.config missing"; exit 1; }
+          unzip -Z1 "$JAR" | grep -q '^volcoloc/Volumetric_Colocalization.class$' \
+            || { echo "FAIL: entry class missing"; exit 1; }
+          echo "OK: $(unzip -Z1 "$JAR" | grep -c '^volcoloc/internal/') relocated internal entries"
