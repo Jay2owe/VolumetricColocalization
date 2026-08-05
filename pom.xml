@@ -117,6 +117,13 @@
 			<artifactId>volcoloc-core</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
+
+		<!-- The shared chassis: ROI and label ingest, and the dialog widgets. -->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>oc3d-core</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -153,6 +160,7 @@
 							<artifactSet>
 								<includes>
 									<include>io.github.jay2owe:volcoloc-core</include>
+									<include>io.github.jay2owe:oc3d-core</include>
 								</includes>
 							</artifactSet>
 							<relocations>
@@ -160,16 +168,28 @@
 									<pattern>sc.fiji.volcoloc.core</pattern>
 									<shadedPattern>volcoloc.internal.volcoloc</shadedPattern>
 								</relocation>
+								<relocation>
+									<pattern>sc.fiji.oc3d.core</pattern>
+									<shadedPattern>volcoloc.internal.core</shadedPattern>
+								</relocation>
 							</relocations>
 							<filters>
 								<filter>
-									<artifact>io.github.jay2owe:volcoloc-core</artifact>
+									<artifact>io.github.jay2owe:*</artifact>
 									<excludes>
 										<exclude>META-INF/MANIFEST.MF</exclude>
 										<exclude>META-INF/maven/**</exclude>
 									</excludes>
 								</filter>
 							</filters>
+							<!--
+							  Only the chassis classes this plugin actually
+							  reaches are worth carrying. minimizeJar drops the
+							  rest, which is most of oc3d-core: the labeller,
+							  the measurement and map builders and the batch
+							  scorers belong to 3D Objects Counter+, not here.
+							-->
+							<minimizeJar>true</minimizeJar>
 						</configuration>
 					</execution>
 				</executions>

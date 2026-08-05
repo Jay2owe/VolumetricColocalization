@@ -8,7 +8,8 @@
  */
 package volcoloc;
 
-import java.util.ArrayList;
+import sc.fiji.oc3d.core.macro.MacroOptions;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -42,40 +43,19 @@ public final class VolColocMacroOptionsParser {
         return options;
     }
 
+    /**
+     * The chassis tokeniser. This plugin's own version was the strict one —
+     * refusing unclosed brackets, stray closing brackets and line breaks in
+     * values, where the shared tokeniser silently mis-parsed all three — so
+     * those checks were promoted into {@code oc3d-core} as
+     * {@code strictTokens} rather than given up on adoption.
+     *
+     * <p>The option <em>model</em> stays here: five image slots, per-channel
+     * thresholds and bounding-box thresholds are this plugin's vocabulary, not
+     * the family's.
+     */
     static List<String> tokenize(String text) {
-        List<String> tokens = new ArrayList<String>();
-        StringBuilder token = new StringBuilder();
-        int bracketDepth = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            if (bracketDepth > 0) {
-                if (c == '\n' || c == '\r') {
-                    throw new IllegalArgumentException(
-                            "Line breaks are not allowed in macro values.");
-                }
-                token.append(c);
-                if (c == '[') bracketDepth++;
-                if (c == ']') bracketDepth--;
-            } else if (Character.isWhitespace(c)) {
-                if (token.length() > 0) {
-                    tokens.add(token.toString());
-                    token.setLength(0);
-                }
-            } else {
-                if (c == ']') {
-                    throw new IllegalArgumentException(
-                            "Unexpected closing bracket in macro options.");
-                }
-                if (c == '[') bracketDepth = 1;
-                token.append(c);
-            }
-        }
-        if (bracketDepth != 0) {
-            throw new IllegalArgumentException(
-                    "Unclosed bracketed macro option value.");
-        }
-        if (token.length() > 0) tokens.add(token.toString());
-        return tokens;
+        return MacroOptions.strictTokens(text);
     }
 
     private static void applyKeyValue(VolColocMacroOptions options,

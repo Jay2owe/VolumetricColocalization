@@ -10,12 +10,24 @@ package volcoloc;
 
 import ij.ImagePlus;
 import ij.gui.Roi;
+import sc.fiji.oc3d.core.ingest.RoiLabelImages;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
  * Public ROI-to-label API.
+ *
+ * <p>The conversion is {@code oc3d-core}'s, shaded into this jar. This plugin
+ * previously carried its own copy, and it was the stricter of the two: it
+ * refused line and point selections, ROIs lying outside the reference, and
+ * ROIs positioned beyond the stack, where the shared version quietly accepted
+ * them and mismeasured. Those rules were promoted into the chassis rather than
+ * dropped on adoption, so every plugin in the family now has them and nothing
+ * here became weaker.
+ *
+ * <p>The argument checks below stay here because their wording is this
+ * plugin's, and they answer before the shared code is reached.
  */
 public final class VolColocLabelImages {
 
@@ -23,7 +35,7 @@ public final class VolColocLabelImages {
     }
 
     public static Roi[] loadRoiSet(String path) throws IOException {
-        return LabelUtils.loadRoiSet(path);
+        return RoiLabelImages.loadRoiSet(path);
     }
 
     public static ImagePlus fromRois(ImagePlus reference, Roi[] rois) {
@@ -33,7 +45,7 @@ public final class VolColocLabelImages {
         if (rois == null || rois.length == 0) {
             throw new IllegalArgumentException("ROI array must contain at least one ROI.");
         }
-        return LabelUtils.roiSetToLabelImage(reference, rois);
+        return RoiLabelImages.fromRois(reference, rois);
     }
 
     public static ImagePlus fromRoiSetFile(ImagePlus reference, String path)
@@ -41,6 +53,8 @@ public final class VolColocLabelImages {
         if (path == null || path.trim().length() == 0) {
             throw new IllegalArgumentException("ROI set path must not be empty.");
         }
+        // One load, one conversion. Calling the chassis's own fromRoiSetFile
+        // would repeat both just to have it apply the title.
         ImagePlus labels = fromRois(reference, loadRoiSet(path));
         String name = new File(path).getName();
         int dot = name.lastIndexOf('.');

@@ -8,6 +8,8 @@
  */
 package volcoloc.ui;
 
+import sc.fiji.oc3d.core.ui.ToggleSwitch;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
