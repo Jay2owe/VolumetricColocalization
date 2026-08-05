@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>43.0.0</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>io.github.jay2owe</groupId>
+	<artifactId>Volumetric_Colocalization</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+
+	<name>Volumetric Colocalization</name>
+	<description>Directional object-volume overlap for 2–5 ImageJ label images</description>
+	<url>https://github.com/Jay2owe/VolumetricColocalization</url>
+	<inceptionYear>2026</inceptionYear>
+
+	<organization>
+		<name>UK Dementia Research Institute at Imperial College London</name>
+		<url>https://ukdri.ac.uk/centres/imperial</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>BSD 3-Clause License</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>Jay2owe</id>
+			<name>Jamie Malcolm</name>
+			<email>jamiemalcolm12@gmail.com</email>
+			<url>https://github.com/Jay2owe</url>
+			<organization>UK Dementia Research Institute at Imperial College London</organization>
+			<organizationUrl>https://www.ukdri.ac.uk/labs/brancaccio-lab</organizationUrl>
+			<properties>
+				<orcid>0009-0008-3862-2776</orcid>
+			</properties>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Jamie Malcolm</name>
+			<url>https://github.com/Jay2owe</url>
+			<properties><id>Jay2owe</id></properties>
+		</contributor>
+	</contributors>
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/imagej</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/Jay2owe/VolumetricColocalization</connection>
+		<developerConnection>scm:git:git@github.com:Jay2owe/VolumetricColocalization</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/Jay2owe/VolumetricColocalization</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/Jay2owe/VolumetricColocalization/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/Jay2owe/VolumetricColocalization/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>volcoloc</package-name>
+		<license.licenseName>bsd_3</license.licenseName>
+		<license.copyrightOwners>Jamie Malcolm</license.copyrightOwners>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!--
+		  TEST SCOPE ONLY, and deliberately so.
+
+		  The extracted engine is diffed against this plugin's own engine by
+		  volcoloc.equivalence.EngineEquivalenceTest. Nothing in src/main links
+		  it yet, so the shipped jar is unchanged and the two engines stay
+		  independently observable — which is the whole point of the gate.
+
+		  It becomes a compile dependency at migration Stage 2, when
+		  VolColocAnalysis is deleted and VolColocResult becomes a table
+		  adapter over the core model. Do not promote it before the gate is
+		  green.
+		-->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>volcoloc-core</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<licenseResolver>${project.baseUri}src/license</licenseResolver>
+					<roots>
+						<root>src/main</root>
+						<root>src/test</root>
+					</roots>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
