@@ -4,10 +4,15 @@
 two measures are complementary rather than competing, so pointing at each other is honest and is
 the cheapest adoption channel available.
 
-**Hold until v1.0.0 is actually published.** Applying this now would put a link to a nonexistent
-plugin and a dead update-site URL into a published README that real users read. Trigger for
-applying: the jar is on `https://sites.imagej.net/Volumetric-Colocalization/` and the GitHub
-release exists.
+**Hold until Volumetric Colocalization is actually published.** Applying this now would put a link
+to a nonexistent plugin and a dead update-site URL into a published README that real users read.
+Trigger for applying: the jar is on `https://sites.imagej.net/Volumetric-Colocalization/` and the
+GitHub release exists.
+
+*Corrected 2026-08-05: this line previously said "hold until v1.0.0". The version was never the
+trigger — the two conditions in the sentence above are, and they are unchanged. The first release
+is `0.1.0`, per `docs/VOLCOLOC_CORE_MIGRATION_PLAN.md` § Stage 4 and `CITATION.cff`. See
+`docs/RELEASE_STAGE4.md`.*
 
 Apply both halves in the same session so the two READMEs never disagree.
 

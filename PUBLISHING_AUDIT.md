@@ -2,6 +2,12 @@
 
 Status: development build; not ready to publish.
 
+The release itself — wiki page, update site, `sites.yml` PR, and the order they
+have to happen in — is drafted in `docs/RELEASE_STAGE4.md`. Nothing there has
+been submitted. The one item on the list below that no amount of automated
+testing can close is **interactive Fiji acceptance testing**; it needs a person
+at a Fiji install.
+
 ## Passed in the current tree
 
 - Maven coordinates and Java package match the build plan.
