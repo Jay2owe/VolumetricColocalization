@@ -2,6 +2,31 @@
 
 ## 0.1.0 - Unreleased
 
+### Architecture — split into an embeddable engine and a thin plugin
+
+Done before first publication, so this plugin never ships the duplicated
+chassis it was built from. No measured value changed: the extraction is gated
+by 299 golden dumps captured from the pre-migration build and compared
+bit-for-bit, doubles included, on every later change.
+
+- Extracted the analysis engine into `volcoloc-core` and deleted this plugin's
+  copy — `VolColocAnalysis`, `BoundingBoxAnalysis` and `PrimitiveMaps`, 960
+  lines. 3D Objects Counter+ and the Colocalization Suite can now embed the
+  same engine without a user installing this plugin.
+- `VolColocResult` is now a table adapter: it holds the engine's result model
+  and adds this plugin's ImageJ `ResultsTable` builders. A consumer with its
+  own table layout uses the model and skips the tables.
+- Adopted `oc3d-core` for ROI ingest, the toggle widget and macro tokenising;
+  deleted this plugin's `LabelUtils` and `ToggleSwitch`.
+- Both modules are shaded into the jar, relocated under `volcoloc.internal`.
+  Still one jar, still installable on a bare Fiji with no prerequisites.
+- Promoted this plugin's stricter rules into the shared chassis rather than
+  losing them to it — see `oc3d-core`. Its ROI ingest previously smeared an
+  ROI positioned beyond the reference stack across the whole volume, and its
+  macro tokeniser silently mis-parsed unclosed brackets. Both now refuse.
+
+### Behaviour
+
 - Added directional object-volume overlap for 2–5 label images.
 - Retained every overlapping partner with a configurable detail-row filter.
 - Added per-channel thresholds, pair summaries, and source-anchored
