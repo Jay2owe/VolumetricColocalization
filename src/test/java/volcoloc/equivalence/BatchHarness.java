@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -314,12 +315,20 @@ final class BatchHarness {
     private static String tree(File root) throws IOException {
         List<File> files = new ArrayList<File>();
         collect(root, files);
-        Collections.sort(files);
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File left, File right) {
+                String leftPath = relativePath(root, left);
+                String rightPath = relativePath(root, right);
+                int insensitive = leftPath.compareToIgnoreCase(rightPath);
+                return insensitive != 0
+                        ? insensitive : leftPath.compareTo(rightPath);
+            }
+        });
         StringBuilder out = new StringBuilder();
         out.append("files=").append(files.size()).append('\n');
         for (File file : files) {
-            String path = root.toPath().relativize(file.toPath()).toString()
-                    .replace(File.separatorChar, '/');
+            String path = relativePath(root, file);
             out.append("--- ").append(path).append(" ---\n");
             out.append(new String(Files.readAllBytes(file.toPath()),
                     StandardCharsets.UTF_8));
@@ -328,6 +337,11 @@ final class BatchHarness {
             }
         }
         return out.toString();
+    }
+
+    private static String relativePath(File root, File file) {
+        return root.toPath().relativize(file.toPath()).toString()
+                .replace(File.separatorChar, '/');
     }
 
     private static void collect(File current, List<File> files) {

@@ -59,15 +59,25 @@ public class BatchEquivalenceTest {
         StringBuilder diagnostics = new StringBuilder();
         for (Map.Entry<String, String> entry : golden.entrySet()) {
             String value = current.get(entry.getKey());
-            if (value == null || !entry.getValue().equals(value)) {
+            String expected = comparisonForm(entry.getKey(), entry.getValue());
+            String actual = comparisonForm(entry.getKey(), value);
+            if (actual == null || !expected.equals(actual)) {
                 moved.add(entry.getKey());
                 diagnostics.append('\n').append(entry.getKey()).append(": ")
-                        .append(firstDifference(entry.getValue(), value));
+                        .append(firstDifference(expected, actual));
             }
         }
         if (!moved.isEmpty()) {
             fail("Tier 1 batch output moved in " + moved + diagnostics);
         }
+    }
+
+    private static String comparisonForm(String scenario, String value) {
+        if (value == null) return null;
+        if ("rejections".equals(scenario)) {
+            return value.replace("<workspace>\\", "<workspace>/");
+        }
+        return value;
     }
 
     private static String firstDifference(String expected, String actual) {
