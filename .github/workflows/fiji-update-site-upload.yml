@@ -134,14 +134,21 @@ jobs:
           JAR="release-artifact/Volumetric_Colocalization-0.1.0.jar"
           test -f "$JAR"
           echo "$RELEASE_SHA256  $JAR" | sha256sum --check --strict
-          unzip -Z1 "$JAR" | grep -q '^META-INF/MANIFEST.MF$'
-          unzip -Z1 "$JAR" | grep -q '^plugins.config$'
-          unzip -Z1 "$JAR" | grep -q '^volcoloc/Volumetric_Colocalization.class$'
-          test "$(unzip -Z1 "$JAR" | grep -c '^sc/fiji/')" -eq 0
-          test "$(unzip -Z1 "$JAR" | grep -c '^ij/')" -eq 0
-          unzip -p "$JAR" META-INF/MANIFEST.MF \
-            | grep -q "^Implementation-Build: $RELEASE_COMMIT$"
-          if unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q '^Class-Path:'; then
+          ENTRIES="$(unzip -Z1 "$JAR")"
+          MANIFEST="$(unzip -p "$JAR" META-INF/MANIFEST.MF)"
+          grep -Fxq 'META-INF/MANIFEST.MF' <<< "$ENTRIES"
+          grep -Fxq 'plugins.config' <<< "$ENTRIES"
+          grep -Fxq 'volcoloc/Volumetric_Colocalization.class' <<< "$ENTRIES"
+          if grep -q '^sc/fiji/' <<< "$ENTRIES"; then
+            echo "Canonical release artifact contains unrelocated sc/fiji classes."
+            exit 1
+          fi
+          if grep -q '^ij/' <<< "$ENTRIES"; then
+            echo "Canonical release artifact bundles ImageJ classes."
+            exit 1
+          fi
+          grep -q "^Implementation-Build: $RELEASE_COMMIT$" <<< "$MANIFEST"
+          if grep -q '^Class-Path:' <<< "$MANIFEST"; then
             echo "Canonical release artifact incorrectly declares external class-path jars."
             exit 1
           fi
