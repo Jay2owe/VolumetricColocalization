@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 - Unreleased
+## 0.1.0 - 2026-08-08
 
 ### Architecture — split into an embeddable engine and a thin plugin
 
@@ -18,6 +18,10 @@ bit-for-bit, doubles included, on every later change.
   own table layout uses the model and skips the tables.
 - Adopted `oc3d-core` for ROI ingest, the toggle widget and macro tokenising;
   deleted this plugin's `LabelUtils` and `ToggleSwitch`.
+- Adopted the same `oc3d-core` regex-group discovery used by CPC and deleted
+  VolColoc's private folder walker and grouping implementation. The plugin
+  keeps its 2–5 channel policy and output schema while sharing traversal,
+  cycle protection, output exclusion, optional-group handling, and ordering.
 - Both modules are shaded into the jar, relocated under `volcoloc.internal`.
   Still one jar, still installable on a bare Fiji with no prerequisites.
 - Promoted this plugin's stricter rules into the shared chassis rather than
@@ -33,6 +37,9 @@ bit-for-bit, doubles included, on every later change.
   multi-colocalization patterns.
 - Added label-image, ROI-set, macro, Java API, and folder-batch workflows.
 - Added CPC-style Swing dialogs and the auto-save output tree.
+- Matched CPC's batch entry flow: a **Batch...** footer action opens a dedicated
+  batch dialog with an inline, computation-free group preview, then runs the
+  accepted batch off the UI thread.
 - Changed partner-detail filtering to source-overlap percentage, default 50%.
 - Matched CPC multi-target per-object columns, positive-only patterns, `None`,
   and `— Any —` totals.
@@ -104,5 +111,9 @@ bit-for-bit, doubles included, on every later change.
 - Built each direction once and reused it for multi-colocalization instead of
   recomputing all N(N-1) ordered pairs.
 - Exposed the source channel's volume unit on `DirectionResult`.
+- Added an immutable batch golden master captured at commit
+  `4b8cde235e97ab8b1522bbeddabd8c62ea9f8f0e`; discovery, result tables, saved
+  files, rejection messages, degenerate inputs, and every output switch are
+  Tier 1 exact through chassis adoption.
 - Documented BBVolColoc's bounding-box-volume cost, ROI overlap and slice
   rules, and the accepted image types.

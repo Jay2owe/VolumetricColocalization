@@ -14,17 +14,24 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.Macro;
 import ij.WindowManager;
-import ij.gui.YesNoCancelDialog;
 import ij.plugin.PlugIn;
 import ij.plugin.frame.Recorder;
-import ij.text.TextWindow;
+import sc.fiji.oc3d.core.ui.ToggleSwitch;
 import volcoloc.ui.VolColocDialog;
 
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * ImageJ 1.x entry point for interactive, macro, and folder-batch workflows.
@@ -60,17 +67,25 @@ public class Volumetric_Colocalization implements PlugIn {
         VolColocDialog modeDialog = new VolColocDialog(TITLE);
         modeDialog.addHeader("Input");
         modeDialog.addChoice("Input mode",
-                new String[]{"Label Images", "ROI Sets", "Folder Batch"},
+                new String[]{"Label Images", "ROI Sets"},
                 "Label Images");
         modeDialog.addHelpText("Label images and ROI sets analyse one image group. "
-                + "Folder Batch parses 2-5 channel files per group.");
+                + "Use Batch for regex-based folder processing.");
+        final AtomicBoolean batchRequested = new AtomicBoolean(false);
+        JButton batchButton = modeDialog.addFooterButton("Batch...");
+        batchButton.addActionListener(event -> {
+            batchRequested.set(true);
+            modeDialog.dispose();
+        });
         modeDialog.showDialog();
+        if (batchRequested.get()) {
+            runBatchDialog();
+            return;
+        }
         if (modeDialog.wasCanceled()) return;
         String mode = modeDialog.getNextChoice();
         if ("ROI Sets".equals(mode)) {
             runRoiDialog();
-        } else if ("Folder Batch".equals(mode)) {
-            runBatchDialog();
         } else {
             runLabelDialog();
         }
@@ -194,11 +209,52 @@ public class Volumetric_Colocalization implements PlugIn {
     private void runBatchDialog() {
         VolColocDialog dialog = new VolColocDialog(TITLE + " - Folder Batch");
         dialog.addHeader("Input");
-        dialog.addDirectoryField("Label folder", "");
-        dialog.addStringField("Filename regular expression",
+        final JTextField folderField =
+                dialog.addDirectoryField("Label folder", "");
+        final JTextField regexField = dialog.addStringField(
+                "Filename regular expression",
                 "(.+)_([^_]+)[.](?:tif|tiff)$", 45);
-        dialog.addNumericField("Channel capture group", 2, 0);
-        dialog.addToggle("Search subfolders", true);
+        final JTextField groupField =
+                dialog.addNumericField("Channel capture group", 2, 0);
+        final ToggleSwitch recursiveToggle =
+                dialog.addToggle("Search subfolders", true);
+        dialog.addHelpText("The expression must match the whole filename. "
+                + "The selected capture group is the channel that varies "
+                + "within each image group.");
+
+        final JTextArea previewArea = new JTextArea(10, 42);
+        previewArea.setEditable(false);
+        previewArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        final JScrollPane previewScroll = new JScrollPane(previewArea);
+        previewScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+        previewScroll.setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, 190));
+        previewScroll.setVisible(false);
+        JButton previewButton = dialog.addButton("Preview Groups");
+        dialog.addComponent(previewScroll);
+        previewButton.addActionListener(event -> {
+            try {
+                int varyingGroup = Integer.parseInt(
+                        groupField.getText().trim());
+                VolColocBatchParameters previewParameters =
+                        VolColocBatchParameters.builder(
+                                        new File(folderField.getText().trim()),
+                                        regexField.getText().trim(),
+                                        varyingGroup)
+                                .recursive(recursiveToggle.isSelected())
+                                .build();
+                previewArea.setText(
+                        VolColocBatchRunner.preview(previewParameters));
+            } catch (NumberFormatException exception) {
+                previewArea.setText("Invalid channel capture group.");
+            } catch (RuntimeException exception) {
+                previewArea.setText(exception.getMessage());
+            }
+            previewArea.setCaretPosition(0);
+            previewScroll.setVisible(true);
+            dialog.repack();
+        });
+
         dialog.addStringField("Channel thresholds (name=%, comma-separated)",
                 "", 45);
         dialog.addHelpText("Unlisted channels use 30%. Example: DAPI=20,GFAP=40");
@@ -248,15 +304,17 @@ public class Volumetric_Colocalization implements PlugIn {
         options.validate();
 
         VolColocBatchParameters parameters = batchParameters(options);
-        String preview = VolColocBatchRunner.preview(parameters);
-        new TextWindow(TITLE + " - Batch Preview", preview, 820, 600);
-        YesNoCancelDialog confirm = new YesNoCancelDialog(
-                IJ.getInstance(), TITLE,
-                "The parsed groups are shown in the preview window.\n"
-                        + "Run this batch now?");
-        if (!confirm.yesPressed()) return;
         record(options);
-        runBatch(parameters, false);
+        new Thread(() -> {
+            try {
+                runBatch(parameters, false);
+            } catch (RuntimeException exception) {
+                IJ.log(TITLE + " batch failed: " + exception.getMessage());
+                if (!GraphicsEnvironment.isHeadless()) {
+                    IJ.error(TITLE, exception.getMessage());
+                }
+            }
+        }, "Volumetric-Colocalization-Batch").start();
     }
 
     private void runMacro(String optionsText) throws Exception {

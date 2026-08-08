@@ -14,7 +14,7 @@
 
 	<groupId>io.github.jay2owe</groupId>
 	<artifactId>Volumetric_Colocalization</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 
 	<name>Volumetric Colocalization</name>
 	<description>Directional object-volume overlap for 2–5 ImageJ label images</description>
@@ -115,19 +115,10 @@
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>volcoloc-core</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 
-		<!--
-		  The shared chassis: ROI and label ingest, and the dialog widgets.
-
-		  Pinned to the 0.1.0 release, not a SNAPSHOT. This previously said
-		  0.1.0-SNAPSHOT, which no longer exists in oc3d-core's history at all —
-		  that version was released as 0.1.0 and master moved to 0.2.0-SNAPSHOT.
-		  It kept resolving here only from a stale copy in the local repository,
-		  so the build worked on this machine and nowhere else. Content is
-		  identical: the release commit changed the version and nothing more.
-		-->
+		<!-- Shared ROI/label ingest, regex grouping, and dialog widgets. -->
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>oc3d-core</artifactId>
@@ -137,6 +128,18 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<!-- Both cores are shaded; users install this jar alone. -->
+							<addClasspath>false</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 			<!--
 			  Shade volcoloc-core into this jar, relocated.
 
@@ -184,7 +187,14 @@
 							</relocations>
 							<filters>
 								<filter>
-									<artifact>io.github.jay2owe:*</artifact>
+									<artifact>io.github.jay2owe:volcoloc-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>io.github.jay2owe:oc3d-core</artifact>
 									<excludes>
 										<exclude>META-INF/MANIFEST.MF</exclude>
 										<exclude>META-INF/maven/**</exclude>

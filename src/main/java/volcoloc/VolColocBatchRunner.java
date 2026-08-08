@@ -11,6 +11,7 @@ package volcoloc;
 import sc.fiji.volcoloc.core.MultiTargetSummary;
 
 import sc.fiji.volcoloc.core.OverlapResult;
+import sc.fiji.oc3d.core.io.RegexGroupDiscovery;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -19,7 +20,6 @@ import ij.measure.ResultsTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -42,20 +42,13 @@ public final class VolColocBatchRunner {
 
     public static String preview(VolColocBatchParameters parameters) {
         Compiled compiled = compile(parameters);
-        return previewGroups(findGroupsRecursive(
-                parameters.getInputFolder(),
-                compiled.pattern,
-                parameters.getVaryingGroup(),
-                parameters.isRecursive()));
+        return previewGroups(discover(parameters, compiled.pattern));
     }
 
     public static VolColocBatchResult run(VolColocBatchParameters parameters) {
         Compiled compiled = compile(parameters);
-        Map<String, Map<String, List<File>>> folders = findGroupsRecursive(
-                parameters.getInputFolder(),
-                compiled.pattern,
-                parameters.getVaryingGroup(),
-                parameters.isRecursive());
+        Map<String, Map<String, List<File>>> folders =
+                discover(parameters, compiled.pattern);
         if (folders.isEmpty()) {
             throw new IllegalArgumentException(
                     "No files matched the batch regular expression.");
@@ -299,54 +292,23 @@ public final class VolColocBatchRunner {
         return result;
     }
 
-    static Map<String, Map<String, List<File>>> findGroupsRecursive(
-            File root, Pattern pattern, int varyingGroup, boolean recursive) {
-        Map<String, Map<String, List<File>>> result =
-                new LinkedHashMap<String, Map<String, List<File>>>();
-        if (recursive) {
-            walk(root, "", pattern, varyingGroup, result,
-                    new HashSet<String>());
-        } else {
-            Map<String, List<File>> groups =
-                    findGroups(root, pattern, varyingGroup);
-            if (!groups.isEmpty()) result.put("", groups);
-        }
-        return result;
-    }
-
-    static Map<String, List<File>> findGroups(
-            File folder, Pattern pattern, int varyingGroup) {
-        Map<String, List<File>> groups =
-                new LinkedHashMap<String, List<File>>();
-        File[] entries = folder.listFiles();
-        if (entries == null) return groups;
-        Arrays.sort(entries);
-        for (File file : entries) {
-            if (!file.isFile()) continue;
-            Matcher matcher = pattern.matcher(file.getName());
-            if (!matcher.matches()) continue;
-            if (matcher.start(varyingGroup) < 0
-                    || matcher.end(varyingGroup) < 0) {
-                continue;
-            }
-            String key = file.getName().substring(0, matcher.start(varyingGroup))
-                    + "*" + file.getName().substring(matcher.end(varyingGroup));
-            List<File> files = groups.get(key);
-            if (files == null) {
-                files = new ArrayList<File>();
-                groups.put(key, files);
-            }
-            files.add(file);
-        }
-        for (List<File> files : groups.values()) {
-            Collections.sort(files, new Comparator<File>() {
-                @Override
-                public int compare(File left, File right) {
-                    return left.getName().compareToIgnoreCase(right.getName());
-                }
-            });
-        }
-        return groups;
+    /**
+     * The shared CPC/OC3D folder chassis. VolColoc states its visible policy
+     * explicitly: case-insensitive channel order, two-to-five runnable inputs,
+     * and its own preview/table presentation.
+     */
+    private static Map<String, Map<String, List<File>>> discover(
+            VolColocBatchParameters parameters, Pattern pattern) {
+        File saveBase = parameters.getSaveDirectory() == null
+                ? parameters.getInputFolder()
+                : parameters.getSaveDirectory();
+        Set<File> excluded = Collections.singleton(
+                new File(saveBase, VolColocIO.ROOT_DIRECTORY));
+        return RegexGroupDiscovery.findGroupsRecursive(
+                parameters.getInputFolder(), pattern,
+                parameters.getVaryingGroup(), parameters.isRecursive(),
+                RegexGroupDiscovery.GroupOrder.FILENAME_IGNORE_CASE,
+                excluded);
     }
 
     static String previewGroups(
@@ -384,36 +346,6 @@ public final class VolColocBatchRunner {
             }
         }
         return preview.toString();
-    }
-
-    private static void walk(
-            File current, String relative, Pattern pattern, int varyingGroup,
-            Map<String, Map<String, List<File>>> result,
-            Set<String> visited) {
-        String canonical;
-        try {
-            canonical = current.getCanonicalPath();
-        } catch (IOException exception) {
-            canonical = current.getAbsolutePath();
-        }
-        if (!visited.add(canonical)) return;
-        Map<String, List<File>> groups =
-                findGroups(current, pattern, varyingGroup);
-        if (!groups.isEmpty()) result.put(relative, groups);
-        File[] children = current.listFiles();
-        if (children == null) return;
-        Arrays.sort(children);
-        for (File child : children) {
-            if (!child.isDirectory()
-                    || VolColocIO.ROOT_DIRECTORY.equals(child.getName())) {
-                continue;
-            }
-            String childRelative = relative.length() == 0
-                    ? child.getName()
-                    : relative + "/" + child.getName();
-            walk(child, childRelative, pattern, varyingGroup, result,
-                    visited);
-        }
     }
 
     private static Compiled compile(VolColocBatchParameters parameters) {

@@ -9,17 +9,13 @@ on:
 # any Maven repository and never installed into Fiji as their own jars, so a
 # clean runner cannot resolve them — it has to build them from source first.
 #
-# Each ref must match the version the pom declares. oc3d-core is pinned to its
-# release tag because master has already moved to 0.2.0-SNAPSHOT; building
-# master would produce an artifact this pom does not ask for. volcoloc-core is
-# still on master because that is where its 0.1.0-SNAPSHOT lives — pin it to a
-# tag when this plugin is released, so the published jar names exactly which
-# engine it shaded.
+# Each ref matches the fixed version declared by the plugin POM. Both cores are
+# pinned to immutable release tags so every public build shades the same source.
 env:
   OC3D_CORE_REPO: Jay2owe/oc3d-core
   OC3D_CORE_REF: v0.1.0
   VOLCOLOC_CORE_REPO: Jay2owe/volcoloc-core
-  VOLCOLOC_CORE_REF: master
+  VOLCOLOC_CORE_REF: v0.1.0
 
 jobs:
   test:
@@ -83,6 +79,19 @@ jobs:
             || { echo "FAIL: ImageJ classes bundled into the jar"; exit 1; }
           unzip -Z1 "$JAR" | grep -q '^plugins.config$' \
             || { echo "FAIL: plugins.config missing"; exit 1; }
+          unzip -Z1 "$JAR" | grep -q '^META-INF/MANIFEST.MF$' \
+            || { echo "FAIL: plugin manifest missing"; exit 1; }
+          if unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q '^Class-Path:'; then
+            echo "FAIL: shaded cores must not appear as external class-path jars"
+            exit 1
+          fi
           unzip -Z1 "$JAR" | grep -q '^volcoloc/Volumetric_Colocalization.class$' \
             || { echo "FAIL: entry class missing"; exit 1; }
           echo "OK: $(unzip -Z1 "$JAR" | grep -c '^volcoloc/internal/') relocated internal entries"
+
+      - name: Upload release jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Volumetric_Colocalization-0.1.0
+          path: plugin/target/Volumetric_Colocalization-0.1.0.jar
+          if-no-files-found: error

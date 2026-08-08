@@ -49,6 +49,7 @@ public class VolColocDialog {
 
     private final JDialog dialog;
     private final JPanel content;
+    private final JPanel leftButtons;
     private JPanel activeTarget;
     private final List<ToggleSwitch> toggles = new ArrayList<ToggleSwitch>();
     private final List<JTextField> textFields = new ArrayList<JTextField>();
@@ -76,6 +77,10 @@ public class VolColocDialog {
         dialog.getContentPane().setLayout(new BorderLayout());
         dialog.getContentPane().add(scroll, BorderLayout.CENTER);
 
+        JPanel buttonBar = new JPanel(new BorderLayout());
+        buttonBar.setBackground(BACKGROUND);
+        leftButtons = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
+        leftButtons.setBackground(BACKGROUND);
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
         buttons.setBackground(BACKGROUND);
         JButton cancel = new JButton("Cancel");
@@ -92,7 +97,9 @@ public class VolColocDialog {
         });
         buttons.add(cancel);
         buttons.add(ok);
-        dialog.getContentPane().add(buttons, BorderLayout.SOUTH);
+        buttonBar.add(leftButtons, BorderLayout.WEST);
+        buttonBar.add(buttons, BorderLayout.EAST);
+        dialog.getContentPane().add(buttonBar, BorderLayout.SOUTH);
     }
 
     public void addHeader(String text) {
@@ -277,6 +284,32 @@ public class VolColocDialog {
         return field;
     }
 
+    public JButton addButton(String text) {
+        JPanel row = row();
+        JButton button = new JButton(text);
+        row.add(button);
+        addRow(row);
+        return button;
+    }
+
+    public void addComponent(javax.swing.JComponent component) {
+        if (component == null) return;
+        component.setAlignmentX(Component.LEFT_ALIGNMENT);
+        activeTarget.add(component);
+        activeTarget.add(Box.createVerticalStrut(4));
+    }
+
+    public JButton addFooterButton(String text) {
+        JButton button = new JButton(text);
+        button.setPreferredSize(new Dimension(90, 28));
+        leftButtons.add(button);
+        return button;
+    }
+
+    public void dispose() {
+        dialog.dispose();
+    }
+
     public boolean showDialog() {
         repack();
         dialog.setVisible(true);
@@ -330,7 +363,7 @@ public class VolColocDialog {
         activeTarget.add(Box.createVerticalStrut(4));
     }
 
-    private void repack() {
+    public void repack() {
         dialog.pack();
         Dimension preferred = dialog.getPreferredSize();
         int maximumHeight = (int) (

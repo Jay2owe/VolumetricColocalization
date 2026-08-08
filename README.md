@@ -5,8 +5,7 @@ each segmented object's volume is occupied by objects in another channel. It
 accepts 2–5 label images or ImageJ ROI sets, analyses every channel pair, keeps
 every overlapping partner, and supports reproducible folder batches.
 
-This is an early `0.1.0-SNAPSHOT` build. It is not yet published to an ImageJ
-update site.
+The current release is `0.1.0`.
 
 ## What it reports
 
@@ -66,6 +65,17 @@ truth claim. The continuous percentage is always retained.
 
 Raw intensity images are not used.
 
+## Install from the Fiji update site
+
+In Fiji, choose **Help > Update... > Manage update sites**, add an update site
+named `Volumetric-Colocalization` with this URL, and enable it:
+
+`https://sites.imagej.net/Volumetric-Colocalization/`
+
+Apply the changes and restart Fiji. The command is then available at:
+
+`Plugins > Volumetric Colocalization`
+
 ## Build and install locally
 
 Requirements: Java 8 or newer and Maven.
@@ -74,19 +84,22 @@ Requirements: Java 8 or newer and Maven.
 mvn clean test package
 ```
 
-Copy `target/Volumetric_Colocalization-0.1.0-SNAPSHOT.jar` into Fiji's
+Copy `target/Volumetric_Colocalization-0.1.0.jar` into Fiji's
 `plugins/` directory, restart Fiji, then run:
 
 `Plugins > Volumetric Colocalization`
 
 ## Interactive use
 
-Choose one of three input modes:
+Choose one of two single-run input modes:
 
 1. **Label Images** — select open images or browse to files.
 2. **ROI Sets** — select a reference image and 2–5 ROI files.
-3. **Folder Batch** — provide a filename regular expression and identify the
-   capture group containing the channel name.
+
+For folder processing, click **Batch...** in the lower-left corner. The batch
+dialog follows CPC's workflow: provide a filename regular expression, identify
+the capture group containing the channel name, and use **Preview Groups** to
+inspect the complete grouping before running.
 
 Each channel has its own outgoing overlap threshold. The partner-row filter is
 the percentage of the source object contributed by that individual partner and
@@ -105,8 +118,9 @@ The collapsed **Bounding-box analyses** section optionally enables:
 BBColoc and BBVolColoc use separate per-source bounding-box thresholds,
 defaulting to 30%.
 
-Folder mode shows every parsed group before any images are opened. Groups with
-fewer than 2 or more than 5 files are marked `SKIP`.
+The inline folder preview opens no images and performs no analysis. It shows
+every parsed group; groups with fewer than 2 or more than 5 files are marked
+`SKIP`.
 
 ## Batch filenames
 

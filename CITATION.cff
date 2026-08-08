@@ -16,6 +16,7 @@ repository-code: "https://github.com/Jay2owe/VolumetricColocalization"
 url: "https://github.com/Jay2owe/VolumetricColocalization"
 license: BSD-3-Clause
 version: "0.1.0"
+date-released: "2026-08-08"
 keywords:
   - imagej
   - fiji

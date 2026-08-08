@@ -139,15 +139,15 @@ target/Volumetric_Colocalization-0.1.0-SNAPSHOT.jar
 
 | Check | Result |
 |---|---|
-| total entries | 74 |
+| total entries | 77 |
 | `plugins.config` present | yes |
 | entry class `volcoloc/Volumetric_Colocalization.class` | present |
 | unrelocated `sc/fiji/` classes | **0** |
 | bundled `ij/` classes | **0** |
 | relocated engine, `volcoloc/internal/volcoloc/` | 33 classes |
-| relocated chassis, `volcoloc/internal/core/` | 6 classes — `LabelUtils`, `RoiLabelImages`, `LabelImages`, `MacroOptions`, `ToggleSwitch` |
+| relocated chassis, `volcoloc/internal/core/` | 9 classes — `LabelUtils`, `RoiLabelImages`, `LabelImages`, `MacroOptions`, `ToggleSwitch`, and `RegexGroupDiscovery` with its ordering types |
 
-Six chassis classes rather than the whole of `oc3d-core` is `minimizeJar` doing its
+Nine chassis classes rather than the whole of `oc3d-core` is `minimizeJar` doing its
 job: only what is actually reached is carried.
 
 ### The artifact-glob trap
