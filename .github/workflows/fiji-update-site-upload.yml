@@ -36,6 +36,10 @@ jobs:
       FIJI_DOWNLOAD_URL: "https://downloads.imagej.net/fiji/latest/fiji-latest-linux64-jdk.zip"
       IMAGEJ_UPDATE_SITE_NAME: "Volumetric-Colocalization"
       IMAGEJ_UPDATE_SITE_URL: "https://sites.imagej.net/Volumetric-Colocalization/"
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: "v0.1.0"
+      RELEASE_COMMIT: "f87733e1ccf6886cbed929b740db9435ce5f51ec"
+      RELEASE_SHA256: "E3E66523C9BAA55ABA9684B5E6ABC5957EFB1C380B699591889F1E2F5ADA5CE1"
       OC3D_CORE_REPO: "Jay2owe/oc3d-core"
       OC3D_CORE_REF: "v0.1.0"
       VOLCOLOC_CORE_REPO: "Jay2owe/volcoloc-core"
@@ -43,7 +47,7 @@ jobs:
       IMAGEJ_UPLOAD_USER: ${{ secrets.IMAGEJ_UPLOAD_USER }}
       IMAGEJ_UPLOAD_PASSWORD: ${{ secrets.IMAGEJ_UPLOAD_PASSWORD }}
       DEFAULT_UPLOAD_USER: ""
-      ARTIFACT_GLOB: "target/Volumetric_Colocalization-*.jar"
+      ARTIFACT_GLOB: "release-artifact/Volumetric_Colocalization-0.1.0.jar"
       INSTALL_DIR: "plugins"
       ARTIFACT_NAME: ""
       REPLACE_GLOB: "plugins/Volumetric_Colocalization-*.jar"
@@ -114,6 +118,37 @@ jobs:
       - name: Build and verify plugin artifact
         shell: bash
         run: ./mvnw --batch-mode --no-transfer-progress clean verify
+
+      - name: Download canonical GitHub Release artifact
+        shell: bash
+        run: |
+          mkdir -p release-artifact
+          gh release download "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "Volumetric_Colocalization-0.1.0.jar" \
+            --dir release-artifact
+
+      - name: Verify canonical release artifact
+        shell: bash
+        run: |
+          JAR="release-artifact/Volumetric_Colocalization-0.1.0.jar"
+          test -f "$JAR"
+          echo "$RELEASE_SHA256  $JAR" | sha256sum --check --strict
+          unzip -Z1 "$JAR" | grep -q '^META-INF/MANIFEST.MF$'
+          unzip -Z1 "$JAR" | grep -q '^plugins.config$'
+          unzip -Z1 "$JAR" | grep -q '^volcoloc/Volumetric_Colocalization.class$'
+          test "$(unzip -Z1 "$JAR" | grep -c '^sc/fiji/')" -eq 0
+          test "$(unzip -Z1 "$JAR" | grep -c '^ij/')" -eq 0
+          unzip -p "$JAR" META-INF/MANIFEST.MF \
+            | grep -q "^Implementation-Build: $RELEASE_COMMIT$"
+          if unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q '^Class-Path:'; then
+            echo "Canonical release artifact incorrectly declares external class-path jars."
+            exit 1
+          fi
+
+          BUILT="target/Volumetric_Colocalization-0.1.0.jar"
+          echo "Canonical release asset: $(sha256sum "$JAR")"
+          echo "Fresh verification build: $(sha256sum "$BUILT")"
 
       - name: Download Fiji
         shell: bash
@@ -226,12 +261,10 @@ jobs:
             echo "Upload complete."
           fi
 
-      - name: Upload built artifact
+      - name: Archive canonical release artifact
         uses: actions/upload-artifact@v4
         with:
           name: volumetric-colocalization-uploaded-artifact
           path: |
-            target/Volumetric_Colocalization-*.jar
-            !target/*-sources.jar
-            !target/*-tests.jar
+            release-artifact/Volumetric_Colocalization-0.1.0.jar
           if-no-files-found: error
