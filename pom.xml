@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>43.0.0</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>io.github.jay2owe</groupId>
+	<artifactId>Volumetric_Colocalization</artifactId>
+	<version>0.1.0</version>
+
+	<name>Volumetric Colocalization</name>
+	<description>Directional object-volume overlap for 2–5 ImageJ label images</description>
+	<url>https://github.com/Jay2owe/VolumetricColocalization</url>
+	<inceptionYear>2026</inceptionYear>
+
+	<organization>
+		<name>UK Dementia Research Institute at Imperial College London</name>
+		<url>https://ukdri.ac.uk/centres/imperial</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>BSD 3-Clause License</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>Jay2owe</id>
+			<name>Jamie Malcolm</name>
+			<email>jamiemalcolm12@gmail.com</email>
+			<url>https://github.com/Jay2owe</url>
+			<organization>UK Dementia Research Institute at Imperial College London</organization>
+			<organizationUrl>https://www.ukdri.ac.uk/labs/brancaccio-lab</organizationUrl>
+			<properties>
+				<orcid>0009-0008-3862-2776</orcid>
+			</properties>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Jamie Malcolm</name>
+			<url>https://github.com/Jay2owe</url>
+			<properties><id>Jay2owe</id></properties>
+		</contributor>
+	</contributors>
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/imagej</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/Jay2owe/VolumetricColocalization</connection>
+		<developerConnection>scm:git:git@github.com:Jay2owe/VolumetricColocalization</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/Jay2owe/VolumetricColocalization</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/Jay2owe/VolumetricColocalization/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/Jay2owe/VolumetricColocalization/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>volcoloc</package-name>
+		<license.licenseName>bsd_3</license.licenseName>
+		<license.copyrightOwners>Jamie Malcolm</license.copyrightOwners>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!--
+		  The engine. Shaded into this jar, relocated, and never installed by
+		  the user as a separate artifact — see the shade plugin below.
+
+		  Compile scope but NOT `provided`: the class files must end up inside
+		  the shipped jar, because a bare Fiji has never heard of volcoloc-core
+		  and the whole point of the pattern is that it never has to.
+		-->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>volcoloc-core</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+
+		<!-- Shared ROI/label ingest, regex grouping, and dialog widgets. -->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>oc3d-core</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<!-- Both cores are shaded; users install this jar alone. -->
+							<addClasspath>false</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<!--
+			  Shade volcoloc-core into this jar, relocated.
+
+			  The pattern rule: the user installs ONE jar on a bare Fiji and
+			  never learns a core exists. Relocation is not optional — under
+			  Fiji's flat classloader, two jars carrying the same
+			  fully-qualified class name is a silent-wrong-answer bug, not a
+			  crash, and 3D Objects Counter+ will ship its own copy of this
+			  same engine.
+
+			  Verified before enabling: no Class.forName, no loadClass, no
+			  reflection anywhere in either module, so there are no strings for
+			  relocation to miss. plugins.config names
+			  volcoloc.Volumetric_Colocalization, which is not relocated.
+
+			  artifactSet is an explicit allow-list. net.imagej:ij must never be
+			  bundled: it is what Fiji already is.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>true</createDependencyReducedPom>
+							<artifactSet>
+								<includes>
+									<include>io.github.jay2owe:volcoloc-core</include>
+									<include>io.github.jay2owe:oc3d-core</include>
+								</includes>
+							</artifactSet>
+							<relocations>
+								<relocation>
+									<pattern>sc.fiji.volcoloc.core</pattern>
+									<shadedPattern>volcoloc.internal.volcoloc</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>sc.fiji.oc3d.core</pattern>
+									<shadedPattern>volcoloc.internal.core</shadedPattern>
+								</relocation>
+							</relocations>
+							<filters>
+								<filter>
+									<artifact>io.github.jay2owe:volcoloc-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>io.github.jay2owe:oc3d-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<!--
+							  Only the chassis classes this plugin actually
+							  reaches are worth carrying. minimizeJar drops the
+							  rest, which is most of oc3d-core: the labeller,
+							  the measurement and map builders and the batch
+							  scorers belong to 3D Objects Counter+, not here.
+							-->
+							<minimizeJar>true</minimizeJar>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<licenseResolver>${project.baseUri}src/license</licenseResolver>
+					<roots>
+						<root>src/main</root>
+						<root>src/test</root>
+					</roots>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

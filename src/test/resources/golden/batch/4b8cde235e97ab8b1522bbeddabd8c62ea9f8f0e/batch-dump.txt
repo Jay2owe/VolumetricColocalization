@@ -1,0 +1,941 @@
+# Volumetric Colocalization batch output captured before chassis adoption.
+# Tier 1 throughout: byte-identical text, counts, rows, paths and messages.
+# Immutable. Do not regenerate to hide a difference.
+### flat-default
+== preview ==
+1 folder(s), 2 group(s), 1 runnable, 3 files
+
+(root)
+  lonely_*.tif (1) - SKIP
+    lonely_A.tif
+  sample_*.tif (2)
+    sample_A.tif
+    sample_B.tif
+== run ==
+total=2 runnable=1 processed=1 skipped=1 errors=0 hasErrors=false
+output=Volumetric Colocalization
+-- summary rows=2 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|sample|A|B|A -> B|1|50|50|30|1|100
+1:|(root)|sample|B|A|B -> A|1|100|100|30|1|100
+-- folder-summary rows=2 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|1|50|30|1|100
+1:|(root)|B|A|B -> A|1|100|30|1|100
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=11
+--- Volumetric Colocalization/Folder/Batch_Folder_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),A,B,A -> B,1,50,30,1,100
+(root),B,A,B -> A,1,100,30,1,100
+--- Volumetric Colocalization/Folder/Batch_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),sample,A,B,A -> B,1,50,50,30,1,100
+(root),sample,B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Folder/README.txt ---
+Folder-batch results. Each parsed group has its own subdirectory. Batch_Summary.csv retains group-level rows; Batch_Folder_Summary.csv combines groups within each folder. Equivalent Multi files contain combination patterns.
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,2,2,1,50,5,1,1,30,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,5,1,50,100
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C2_B_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,A,5,1,1,1,100,1,1,1,30,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C2_B_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,A,5,1,1,100,50
+--- Volumetric Colocalization/Folder/sample/Objects/sample_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,1,50,50,30,1,100
+B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Maps/README.txt ---
+Reserved for overlap maps. Maps are outside the v0.1.0 scope and are not generated yet.
+--- Volumetric Colocalization/Multi/README.txt ---
+Source-anchored multi-colocalization object patterns and pattern summaries.
+--- Volumetric Colocalization/Objects/README.txt ---
+Per-object directional overlap tables, all-partner detail tables, pair summaries, and optional BBColoc, BB-CPC, and BBVolColoc tables.
+### recursive-full
+== preview ==
+2 folder(s), 2 group(s), 2 runnable, 6 files
+
+(root)
+  root_*.tif (3)
+    root_A.tif
+    root_B.tif
+    root_C.tif
+plate-2/
+  nested_*.tif (3)
+    nested_A.tif
+    nested_B.tif
+    nested_C.tif
+== run ==
+total=2 runnable=2 processed=2 skipped=0 errors=0 hasErrors=false
+output=Volumetric Colocalization
+-- summary rows=12 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|root|A|B|A -> B|2|75.000|75|20|2|100.000
+1:|(root)|root|B|A|B -> A|1|100.000|100|40|1|100.000
+2:|(root)|root|A|C|A -> C|2|75.000|75|20|2|100.000
+3:|(root)|root|C|A|C -> A|1|100.000|100|30|1|100.000
+4:|(root)|root|B|C|B -> C|1|50.000|50|40|1|100.000
+5:|(root)|root|C|B|C -> B|1|50.000|50|30|1|100.000
+6:|plate-2|nested|A|B|A -> B|3|66.667|100|20|2|66.667
+7:|plate-2|nested|B|A|B -> A|1|100.000|100|40|1|100.000
+8:|plate-2|nested|A|C|A -> C|3|66.667|100|20|2|66.667
+9:|plate-2|nested|C|A|C -> A|1|100.000|100|30|1|100.000
+10:|plate-2|nested|B|C|B -> C|1|50.000|50|40|1|100.000
+11:|plate-2|nested|C|B|C -> B|1|50.000|50|30|1|100.000
+-- folder-summary rows=12 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|2|75.000|20|2|100.000
+1:|(root)|B|A|B -> A|1|100.000|40|1|100.000
+2:|(root)|A|C|A -> C|2|75.000|20|2|100.000
+3:|(root)|C|A|C -> A|1|100.000|30|1|100.000
+4:|(root)|B|C|B -> C|1|50.000|40|1|100.000
+5:|(root)|C|B|C -> B|1|50.000|30|1|100.000
+6:|plate-2|A|B|A -> B|3|66.667|20|2|66.667
+7:|plate-2|B|A|B -> A|1|100.000|40|1|100.000
+8:|plate-2|A|C|A -> C|3|66.667|20|2|66.667
+9:|plate-2|C|A|C -> A|1|100.000|30|1|100.000
+10:|plate-2|B|C|B -> C|1|50.000|40|1|100.000
+11:|plate-2|C|B|C -> B|1|50.000|30|1|100.000
+-- multi rows=20 --
+[Folder, Group, Source, Target Channels, Pattern, Count, % of Source]
+0:|(root)|root|A|["B", "C"]|B + C|2|100.000
+1:|(root)|root|A|["B", "C"]|None|0|0.000
+2:|(root)|root|A|["B", "C"]|— Any —|2|100.000
+3:|(root)|root|B|["A", "C"]|A + C|1|100.000
+4:|(root)|root|B|["A", "C"]|None|0|0.000
+5:|(root)|root|B|["A", "C"]|— Any —|1|100.000
+6:|(root)|root|C|["A", "B"]|A + B|1|100.000
+7:|(root)|root|C|["A", "B"]|None|0|0.000
+8:|(root)|root|C|["A", "B"]|— Any —|1|100.000
+9:|plate-2|nested|A|["B", "C"]|B|1|33.330
+10:|plate-2|nested|A|["B", "C"]|C|1|33.330
+11:|plate-2|nested|A|["B", "C"]|B + C|1|33.330
+12:|plate-2|nested|A|["B", "C"]|None|0|0.000
+13:|plate-2|nested|A|["B", "C"]|— Any —|3|100.000
+14:|plate-2|nested|B|["A", "C"]|A + C|1|100.000
+15:|plate-2|nested|B|["A", "C"]|None|0|0.000
+16:|plate-2|nested|B|["A", "C"]|— Any —|1|100.000
+17:|plate-2|nested|C|["A", "B"]|A + B|1|100.000
+18:|plate-2|nested|C|["A", "B"]|None|0|0.000
+19:|plate-2|nested|C|["A", "B"]|— Any —|1|100.000
+-- folder-multi rows=20 --
+[Folder, Source, Target Channels, Pattern, Count, % of Source]
+0:|(root)|A|["B", "C"]|B + C|2|100.000
+1:|(root)|A|["B", "C"]|None|0|0.000
+2:|(root)|A|["B", "C"]|— Any —|2|100.000
+3:|(root)|B|["A", "C"]|A + C|1|100.000
+4:|(root)|B|["A", "C"]|None|0|0.000
+5:|(root)|B|["A", "C"]|— Any —|1|100.000
+6:|(root)|C|["A", "B"]|A + B|1|100.000
+7:|(root)|C|["A", "B"]|None|0|0.000
+8:|(root)|C|["A", "B"]|— Any —|1|100.000
+9:|plate-2|A|["B", "C"]|B|1|33.330
+10:|plate-2|A|["B", "C"]|C|1|33.330
+11:|plate-2|A|["B", "C"]|B + C|1|33.330
+12:|plate-2|A|["B", "C"]|None|0|0.000
+13:|plate-2|A|["B", "C"]|— Any —|3|100.000
+14:|plate-2|B|["A", "C"]|A + C|1|100.000
+15:|plate-2|B|["A", "C"]|None|0|0.000
+16:|plate-2|B|["A", "C"]|— Any —|1|100.000
+17:|plate-2|C|["A", "B"]|A + B|1|100.000
+18:|plate-2|C|["A", "B"]|None|0|0.000
+19:|plate-2|C|["A", "B"]|— Any —|1|100.000
+-- bounding rows=36 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Method, Object Count, Mean %, Median %, Threshold %, Positive Count, Positive %, Mean Total Fill %]
+0:|(root)|root|A|B|A -> B|BBColoc|2|100.000|100.000|25|2|100.000|NaN
+1:|(root)|root|A|B|A -> B|BB-CPC|2|100.000|100.000|NaN|2|100.000|NaN
+2:|(root)|root|A|B|A -> B|BBVolColoc|2|75.000|75.000|25|2|100.000|75.000
+3:|(root)|root|B|A|B -> A|BBColoc|1|66.667|66.667|75|0|0.000|NaN
+4:|(root)|root|B|A|B -> A|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+5:|(root)|root|B|A|B -> A|BBVolColoc|1|66.667|66.667|75|0|0.000|100.000
+6:|(root)|root|A|C|A -> C|BBColoc|2|75.000|75.000|25|2|100.000|NaN
+7:|(root)|root|A|C|A -> C|BB-CPC|2|100.000|100.000|NaN|2|100.000|NaN
+8:|(root)|root|A|C|A -> C|BBVolColoc|2|75.000|75.000|25|2|100.000|75.000
+9:|(root)|root|C|A|C -> A|BBColoc|1|50.000|50.000|30|1|100.000|NaN
+10:|(root)|root|C|A|C -> A|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+11:|(root)|root|C|A|C -> A|BBVolColoc|1|50.000|50.000|30|1|100.000|100.000
+12:|(root)|root|B|C|B -> C|BBColoc|1|66.667|66.667|75|0|0.000|NaN
+13:|(root)|root|B|C|B -> C|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+14:|(root)|root|B|C|B -> C|BBVolColoc|1|66.667|66.667|75|0|0.000|66.667
+15:|(root)|root|C|B|C -> B|BBColoc|1|100.000|100.000|30|1|100.000|NaN
+16:|(root)|root|C|B|C -> B|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+17:|(root)|root|C|B|C -> B|BBVolColoc|1|50.000|50.000|30|1|100.000|50.000
+18:|plate-2|nested|A|B|A -> B|BBColoc|3|100.000|100.000|25|3|100.000|NaN
+19:|plate-2|nested|A|B|A -> B|BB-CPC|3|100.000|100.000|NaN|3|100.000|NaN
+20:|plate-2|nested|A|B|A -> B|BBVolColoc|3|66.667|100.000|25|2|66.667|66.667
+21:|plate-2|nested|B|A|B -> A|BBColoc|1|33.333|33.333|75|0|0.000|NaN
+22:|plate-2|nested|B|A|B -> A|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+23:|plate-2|nested|B|A|B -> A|BBVolColoc|1|33.333|33.333|75|0|0.000|100.000
+24:|plate-2|nested|A|C|A -> C|BBColoc|3|66.667|100.000|25|2|66.667|NaN
+25:|plate-2|nested|A|C|A -> C|BB-CPC|3|66.667|100.000|NaN|2|66.667|NaN
+26:|plate-2|nested|A|C|A -> C|BBVolColoc|3|66.667|100.000|25|2|66.667|66.667
+27:|plate-2|nested|C|A|C -> A|BBColoc|1|50.000|50.000|30|1|100.000|NaN
+28:|plate-2|nested|C|A|C -> A|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+29:|plate-2|nested|C|A|C -> A|BBVolColoc|1|50.000|50.000|30|1|100.000|100.000
+30:|plate-2|nested|B|C|B -> C|BBColoc|1|66.667|66.667|75|0|0.000|NaN
+31:|plate-2|nested|B|C|B -> C|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+32:|plate-2|nested|B|C|B -> C|BBVolColoc|1|66.667|66.667|75|0|0.000|66.667
+33:|plate-2|nested|C|B|C -> B|BBColoc|1|100.000|100.000|30|1|100.000|NaN
+34:|plate-2|nested|C|B|C -> B|BB-CPC|1|100.000|100.000|NaN|1|100.000|NaN
+35:|plate-2|nested|C|B|C -> B|BBVolColoc|1|50.000|50.000|30|1|100.000|50.000
+-- folder-bounding rows=36 --
+[Folder, Source Channel, Partner Channel, Direction, Method, Object Count, Mean %, Threshold %, Positive Count, Positive %, Mean Total Fill %]
+0:|(root)|A|B|A -> B|BBColoc|2|100.000|25|2|100.000|NaN
+1:|(root)|A|B|A -> B|BB-CPC|2|100.000|NaN|2|100.000|NaN
+2:|(root)|A|B|A -> B|BBVolColoc|2|75.000|25|2|100.000|75.000
+3:|(root)|B|A|B -> A|BBColoc|1|66.667|75|0|0.000|NaN
+4:|(root)|B|A|B -> A|BB-CPC|1|100.000|NaN|1|100.000|NaN
+5:|(root)|B|A|B -> A|BBVolColoc|1|66.667|75|0|0.000|100.000
+6:|(root)|A|C|A -> C|BBColoc|2|75.000|25|2|100.000|NaN
+7:|(root)|A|C|A -> C|BB-CPC|2|100.000|NaN|2|100.000|NaN
+8:|(root)|A|C|A -> C|BBVolColoc|2|75.000|25|2|100.000|75.000
+9:|(root)|C|A|C -> A|BBColoc|1|50.000|30|1|100.000|NaN
+10:|(root)|C|A|C -> A|BB-CPC|1|100.000|NaN|1|100.000|NaN
+11:|(root)|C|A|C -> A|BBVolColoc|1|50.000|30|1|100.000|100.000
+12:|(root)|B|C|B -> C|BBColoc|1|66.667|75|0|0.000|NaN
+13:|(root)|B|C|B -> C|BB-CPC|1|100.000|NaN|1|100.000|NaN
+14:|(root)|B|C|B -> C|BBVolColoc|1|66.667|75|0|0.000|66.667
+15:|(root)|C|B|C -> B|BBColoc|1|100.000|30|1|100.000|NaN
+16:|(root)|C|B|C -> B|BB-CPC|1|100.000|NaN|1|100.000|NaN
+17:|(root)|C|B|C -> B|BBVolColoc|1|50.000|30|1|100.000|50.000
+18:|plate-2|A|B|A -> B|BBColoc|3|100.000|25|3|100.000|NaN
+19:|plate-2|A|B|A -> B|BB-CPC|3|100.000|NaN|3|100.000|NaN
+20:|plate-2|A|B|A -> B|BBVolColoc|3|66.667|25|2|66.667|66.667
+21:|plate-2|B|A|B -> A|BBColoc|1|33.333|75|0|0.000|NaN
+22:|plate-2|B|A|B -> A|BB-CPC|1|100.000|NaN|1|100.000|NaN
+23:|plate-2|B|A|B -> A|BBVolColoc|1|33.333|75|0|0.000|100.000
+24:|plate-2|A|C|A -> C|BBColoc|3|66.667|25|2|66.667|NaN
+25:|plate-2|A|C|A -> C|BB-CPC|3|66.667|NaN|2|66.667|NaN
+26:|plate-2|A|C|A -> C|BBVolColoc|3|66.667|25|2|66.667|66.667
+27:|plate-2|C|A|C -> A|BBColoc|1|50.000|30|1|100.000|NaN
+28:|plate-2|C|A|C -> A|BB-CPC|1|100.000|NaN|1|100.000|NaN
+29:|plate-2|C|A|C -> A|BBVolColoc|1|50.000|30|1|100.000|100.000
+30:|plate-2|B|C|B -> C|BBColoc|1|66.667|75|0|0.000|NaN
+31:|plate-2|B|C|B -> C|BB-CPC|1|100.000|NaN|1|100.000|NaN
+32:|plate-2|B|C|B -> C|BBVolColoc|1|66.667|75|0|0.000|66.667
+33:|plate-2|C|B|C -> B|BBColoc|1|100.000|30|1|100.000|NaN
+34:|plate-2|C|B|C -> B|BB-CPC|1|100.000|NaN|1|100.000|NaN
+35:|plate-2|C|B|C -> B|BBVolColoc|1|50.000|30|1|100.000|50.000
+== output-tree ==
+files=58
+--- Volumetric Colocalization/Folder/Batch_Bounding_Box_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Median %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+(root),root,A,B,A -> B,BBColoc,2,100.000,100.000,25,2,100.000,NaN
+(root),root,A,B,A -> B,BB-CPC,2,100.000,100.000,NaN,2,100.000,NaN
+(root),root,A,B,A -> B,BBVolColoc,2,75.000,75.000,25,2,100.000,75.000
+(root),root,B,A,B -> A,BBColoc,1,66.667,66.667,75,0,0.000,NaN
+(root),root,B,A,B -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+(root),root,B,A,B -> A,BBVolColoc,1,66.667,66.667,75,0,0.000,100.000
+(root),root,A,C,A -> C,BBColoc,2,75.000,75.000,25,2,100.000,NaN
+(root),root,A,C,A -> C,BB-CPC,2,100.000,100.000,NaN,2,100.000,NaN
+(root),root,A,C,A -> C,BBVolColoc,2,75.000,75.000,25,2,100.000,75.000
+(root),root,C,A,C -> A,BBColoc,1,50.000,50.000,30,1,100.000,NaN
+(root),root,C,A,C -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+(root),root,C,A,C -> A,BBVolColoc,1,50.000,50.000,30,1,100.000,100.000
+(root),root,B,C,B -> C,BBColoc,1,66.667,66.667,75,0,0.000,NaN
+(root),root,B,C,B -> C,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+(root),root,B,C,B -> C,BBVolColoc,1,66.667,66.667,75,0,0.000,66.667
+(root),root,C,B,C -> B,BBColoc,1,100.000,100.000,30,1,100.000,NaN
+(root),root,C,B,C -> B,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+(root),root,C,B,C -> B,BBVolColoc,1,50.000,50.000,30,1,100.000,50.000
+plate-2,nested,A,B,A -> B,BBColoc,3,100.000,100.000,25,3,100.000,NaN
+plate-2,nested,A,B,A -> B,BB-CPC,3,100.000,100.000,NaN,3,100.000,NaN
+plate-2,nested,A,B,A -> B,BBVolColoc,3,66.667,100.000,25,2,66.667,66.667
+plate-2,nested,B,A,B -> A,BBColoc,1,33.333,33.333,75,0,0.000,NaN
+plate-2,nested,B,A,B -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+plate-2,nested,B,A,B -> A,BBVolColoc,1,33.333,33.333,75,0,0.000,100.000
+plate-2,nested,A,C,A -> C,BBColoc,3,66.667,100.000,25,2,66.667,NaN
+plate-2,nested,A,C,A -> C,BB-CPC,3,66.667,100.000,NaN,2,66.667,NaN
+plate-2,nested,A,C,A -> C,BBVolColoc,3,66.667,100.000,25,2,66.667,66.667
+plate-2,nested,C,A,C -> A,BBColoc,1,50.000,50.000,30,1,100.000,NaN
+plate-2,nested,C,A,C -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+plate-2,nested,C,A,C -> A,BBVolColoc,1,50.000,50.000,30,1,100.000,100.000
+plate-2,nested,B,C,B -> C,BBColoc,1,66.667,66.667,75,0,0.000,NaN
+plate-2,nested,B,C,B -> C,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+plate-2,nested,B,C,B -> C,BBVolColoc,1,66.667,66.667,75,0,0.000,66.667
+plate-2,nested,C,B,C -> B,BBColoc,1,100.000,100.000,30,1,100.000,NaN
+plate-2,nested,C,B,C -> B,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+plate-2,nested,C,B,C -> B,BBVolColoc,1,50.000,50.000,30,1,100.000,50.000
+--- Volumetric Colocalization/Folder/Batch_Folder_Bounding_Box_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+(root),A,B,A -> B,BBColoc,2,100.000,25,2,100.000,NaN
+(root),A,B,A -> B,BB-CPC,2,100.000,NaN,2,100.000,NaN
+(root),A,B,A -> B,BBVolColoc,2,75.000,25,2,100.000,75.000
+(root),B,A,B -> A,BBColoc,1,66.667,75,0,0.000,NaN
+(root),B,A,B -> A,BB-CPC,1,100.000,NaN,1,100.000,NaN
+(root),B,A,B -> A,BBVolColoc,1,66.667,75,0,0.000,100.000
+(root),A,C,A -> C,BBColoc,2,75.000,25,2,100.000,NaN
+(root),A,C,A -> C,BB-CPC,2,100.000,NaN,2,100.000,NaN
+(root),A,C,A -> C,BBVolColoc,2,75.000,25,2,100.000,75.000
+(root),C,A,C -> A,BBColoc,1,50.000,30,1,100.000,NaN
+(root),C,A,C -> A,BB-CPC,1,100.000,NaN,1,100.000,NaN
+(root),C,A,C -> A,BBVolColoc,1,50.000,30,1,100.000,100.000
+(root),B,C,B -> C,BBColoc,1,66.667,75,0,0.000,NaN
+(root),B,C,B -> C,BB-CPC,1,100.000,NaN,1,100.000,NaN
+(root),B,C,B -> C,BBVolColoc,1,66.667,75,0,0.000,66.667
+(root),C,B,C -> B,BBColoc,1,100.000,30,1,100.000,NaN
+(root),C,B,C -> B,BB-CPC,1,100.000,NaN,1,100.000,NaN
+(root),C,B,C -> B,BBVolColoc,1,50.000,30,1,100.000,50.000
+plate-2,A,B,A -> B,BBColoc,3,100.000,25,3,100.000,NaN
+plate-2,A,B,A -> B,BB-CPC,3,100.000,NaN,3,100.000,NaN
+plate-2,A,B,A -> B,BBVolColoc,3,66.667,25,2,66.667,66.667
+plate-2,B,A,B -> A,BBColoc,1,33.333,75,0,0.000,NaN
+plate-2,B,A,B -> A,BB-CPC,1,100.000,NaN,1,100.000,NaN
+plate-2,B,A,B -> A,BBVolColoc,1,33.333,75,0,0.000,100.000
+plate-2,A,C,A -> C,BBColoc,3,66.667,25,2,66.667,NaN
+plate-2,A,C,A -> C,BB-CPC,3,66.667,NaN,2,66.667,NaN
+plate-2,A,C,A -> C,BBVolColoc,3,66.667,25,2,66.667,66.667
+plate-2,C,A,C -> A,BBColoc,1,50.000,30,1,100.000,NaN
+plate-2,C,A,C -> A,BB-CPC,1,100.000,NaN,1,100.000,NaN
+plate-2,C,A,C -> A,BBVolColoc,1,50.000,30,1,100.000,100.000
+plate-2,B,C,B -> C,BBColoc,1,66.667,75,0,0.000,NaN
+plate-2,B,C,B -> C,BB-CPC,1,100.000,NaN,1,100.000,NaN
+plate-2,B,C,B -> C,BBVolColoc,1,66.667,75,0,0.000,66.667
+plate-2,C,B,C -> B,BBColoc,1,100.000,30,1,100.000,NaN
+plate-2,C,B,C -> B,BB-CPC,1,100.000,NaN,1,100.000,NaN
+plate-2,C,B,C -> B,BBVolColoc,1,50.000,30,1,100.000,50.000
+--- Volumetric Colocalization/Folder/Batch_Folder_Multi_Summary.csv ---
+Folder,Source,Target Channels,Pattern,Count,% of Source
+(root),A,"[""B"", ""C""]",B + C,2,100.000
+(root),A,"[""B"", ""C""]",None,0,0.000
+(root),A,"[""B"", ""C""]",— Any —,2,100.000
+(root),B,"[""A"", ""C""]",A + C,1,100.000
+(root),B,"[""A"", ""C""]",None,0,0.000
+(root),B,"[""A"", ""C""]",— Any —,1,100.000
+(root),C,"[""A"", ""B""]",A + B,1,100.000
+(root),C,"[""A"", ""B""]",None,0,0.000
+(root),C,"[""A"", ""B""]",— Any —,1,100.000
+plate-2,A,"[""B"", ""C""]",B,1,33.330
+plate-2,A,"[""B"", ""C""]",C,1,33.330
+plate-2,A,"[""B"", ""C""]",B + C,1,33.330
+plate-2,A,"[""B"", ""C""]",None,0,0.000
+plate-2,A,"[""B"", ""C""]",— Any —,3,100.000
+plate-2,B,"[""A"", ""C""]",A + C,1,100.000
+plate-2,B,"[""A"", ""C""]",None,0,0.000
+plate-2,B,"[""A"", ""C""]",— Any —,1,100.000
+plate-2,C,"[""A"", ""B""]",A + B,1,100.000
+plate-2,C,"[""A"", ""B""]",None,0,0.000
+plate-2,C,"[""A"", ""B""]",— Any —,1,100.000
+--- Volumetric Colocalization/Folder/Batch_Folder_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),A,B,A -> B,2,75.000,20,2,100.000
+(root),B,A,B -> A,1,100.000,40,1,100.000
+(root),A,C,A -> C,2,75.000,20,2,100.000
+(root),C,A,C -> A,1,100.000,30,1,100.000
+(root),B,C,B -> C,1,50.000,40,1,100.000
+(root),C,B,C -> B,1,50.000,30,1,100.000
+plate-2,A,B,A -> B,3,66.667,20,2,66.667
+plate-2,B,A,B -> A,1,100.000,40,1,100.000
+plate-2,A,C,A -> C,3,66.667,20,2,66.667
+plate-2,C,A,C -> A,1,100.000,30,1,100.000
+plate-2,B,C,B -> C,1,50.000,40,1,100.000
+plate-2,C,B,C -> B,1,50.000,30,1,100.000
+--- Volumetric Colocalization/Folder/Batch_Multi_Summary.csv ---
+Folder,Group,Source,Target Channels,Pattern,Count,% of Source
+(root),root,A,"[""B"", ""C""]",B + C,2,100.000
+(root),root,A,"[""B"", ""C""]",None,0,0.000
+(root),root,A,"[""B"", ""C""]",— Any —,2,100.000
+(root),root,B,"[""A"", ""C""]",A + C,1,100.000
+(root),root,B,"[""A"", ""C""]",None,0,0.000
+(root),root,B,"[""A"", ""C""]",— Any —,1,100.000
+(root),root,C,"[""A"", ""B""]",A + B,1,100.000
+(root),root,C,"[""A"", ""B""]",None,0,0.000
+(root),root,C,"[""A"", ""B""]",— Any —,1,100.000
+plate-2,nested,A,"[""B"", ""C""]",B,1,33.330
+plate-2,nested,A,"[""B"", ""C""]",C,1,33.330
+plate-2,nested,A,"[""B"", ""C""]",B + C,1,33.330
+plate-2,nested,A,"[""B"", ""C""]",None,0,0.000
+plate-2,nested,A,"[""B"", ""C""]",— Any —,3,100.000
+plate-2,nested,B,"[""A"", ""C""]",A + C,1,100.000
+plate-2,nested,B,"[""A"", ""C""]",None,0,0.000
+plate-2,nested,B,"[""A"", ""C""]",— Any —,1,100.000
+plate-2,nested,C,"[""A"", ""B""]",A + B,1,100.000
+plate-2,nested,C,"[""A"", ""B""]",None,0,0.000
+plate-2,nested,C,"[""A"", ""B""]",— Any —,1,100.000
+--- Volumetric Colocalization/Folder/Batch_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),root,A,B,A -> B,2,75.000,75,20,2,100.000
+(root),root,B,A,B -> A,1,100.000,100,40,1,100.000
+(root),root,A,C,A -> C,2,75.000,75,20,2,100.000
+(root),root,C,A,C -> A,1,100.000,100,30,1,100.000
+(root),root,B,C,B -> C,1,50.000,50,40,1,100.000
+(root),root,C,B,C -> B,1,50.000,50,30,1,100.000
+plate-2,nested,A,B,A -> B,3,66.667,100,20,2,66.667
+plate-2,nested,B,A,B -> A,1,100.000,100,40,1,100.000
+plate-2,nested,A,C,A -> C,3,66.667,100,20,2,66.667
+plate-2,nested,C,A,C -> A,1,100.000,100,30,1,100.000
+plate-2,nested,B,C,B -> C,1,50.000,50,40,1,100.000
+plate-2,nested,C,B,C -> B,1,50.000,50,30,1,100.000
+--- Volumetric Colocalization/Folder/plate-2/nested/Multi/nested_C1_A_Multi_Objects.csv ---
+Label,B Coloc,B Partner,C Coloc,C Partner,Targets Hit
+1,1,9,0,0,1
+2,0,0,1,8,1
+3,1,9,1,8,2
+--- Volumetric Colocalization/Folder/plate-2/nested/Multi/nested_C2_B_Multi_Objects.csv ---
+Label,A Coloc,A Partner,C Coloc,C Partner,Targets Hit
+9,1,1,1,8,2
+--- Volumetric Colocalization/Folder/plate-2/nested/Multi/nested_C3_C_Multi_Objects.csv ---
+Label,A Coloc,A Partner,B Coloc,B Partner,Targets Hit
+8,1,2,1,9,2
+--- Volumetric Colocalization/Folder/plate-2/nested/Multi/nested_Multi_Summary.csv ---
+Source,Pattern,Count,% of Source
+A,B,1,33.330
+A,C,1,33.330
+A,B + C,1,33.330
+A,None,0,0.000
+A,— Any —,3,100.000
+B,A + C,1,100.000
+B,None,0,0.000
+B,— Any —,1,100.000
+C,A + B,1,100.000
+C,None,0,0.000
+C,— Any —,1,100.000
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_Bounding_Box_Summary.csv ---
+Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Median %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+A,B,A -> B,BBColoc,3,100.000,100.000,25,3,100.000,NaN
+A,B,A -> B,BB-CPC,3,100.000,100.000,NaN,3,100.000,NaN
+A,B,A -> B,BBVolColoc,3,66.667,100.000,25,2,66.667,66.667
+B,A,B -> A,BBColoc,1,33.333,33.333,75,0,0.000,NaN
+B,A,B -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+B,A,B -> A,BBVolColoc,1,33.333,33.333,75,0,0.000,100.000
+A,C,A -> C,BBColoc,3,66.667,100.000,25,2,66.667,NaN
+A,C,A -> C,BB-CPC,3,66.667,100.000,NaN,2,66.667,NaN
+A,C,A -> C,BBVolColoc,3,66.667,100.000,25,2,66.667,66.667
+C,A,C -> A,BBColoc,1,50.000,50.000,30,1,100.000,NaN
+C,A,C -> A,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+C,A,C -> A,BBVolColoc,1,50.000,50.000,30,1,100.000,100.000
+B,C,B -> C,BBColoc,1,66.667,66.667,75,0,0.000,NaN
+B,C,B -> C,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+B,C,B -> C,BBVolColoc,1,66.667,66.667,75,0,0.000,66.667
+C,B,C -> B,BBColoc,1,100.000,100.000,30,1,100.000,NaN
+C,B,C -> B,BB-CPC,1,100.000,100.000,NaN,1,100.000,NaN
+C,B,C -> B,BBVolColoc,1,50.000,50.000,30,1,100.000,50.000
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C2_B_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+A,B,1,1,100,9,25,1,1,9,0,100,100,9,25,1
+A,B,2,1,100,9,25,1,1,9,1,0,0,0,25,0
+A,B,3,1,100,9,25,1,1,9,0,100,100,9,25,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,1,1,1,100,9,1,1,20,1
+A,B,2,1,1,0,0,0,0,0,20,0
+A,B,3,1,1,1,100,9,1,1,20,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,9,1,100,50
+A,B,3,9,1,100,50
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C3_C_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+A,C,1,1,0,0,25,0,0,0,0,0,0,0,25,0
+A,C,2,1,100,8,25,1,1,8,0,100,100,8,25,1
+A,C,3,1,100,8,25,1,1,8,1,100,100,8,25,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C3_C_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,C,1,1,1,0,0,0,0,0,20,0
+A,C,2,1,1,1,100,8,1,1,20,1
+A,C,3,1,1,1,100,8,1,1,20,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C1_A_in_C3_C_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,C,2,8,1,100,50
+A,C,3,8,1,100,50
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C1_A_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+B,A,9,3,33.333,1,75,0,1,2,3,33.333,100,1,75,0
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,A,9,2,2,2,100,1,1,2,40,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,A,9,1,1,50,100
+B,A,9,3,1,50,100
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C3_C_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+B,C,9,3,66.667,8,75,0,1,8,1,66.667,66.667,8,75,0
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C3_C_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,C,9,2,2,1,50,8,1,1,40,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C2_B_in_C3_C_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,C,9,8,1,50,50
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C1_A_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+C,A,8,2,50,2,30,1,1,3,2,50,100,2,30,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+C,A,8,2,2,2,100,2,1,2,30,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+C,A,8,2,1,50,100
+C,A,8,3,1,50,100
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C2_B_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+C,B,8,2,100,9,30,1,1,9,1,50,50,9,30,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+C,B,8,2,2,1,50,9,1,1,30,1
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_C3_C_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+C,B,8,9,1,50,50
+--- Volumetric Colocalization/Folder/plate-2/nested/Objects/nested_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,3,66.667,100,20,2,66.667
+B,A,B -> A,1,100.000,100,40,1,100.000
+A,C,A -> C,3,66.667,100,20,2,66.667
+C,A,C -> A,1,100.000,100,30,1,100.000
+B,C,B -> C,1,50.000,50,40,1,100.000
+C,B,C -> B,1,50.000,50,30,1,100.000
+--- Volumetric Colocalization/Folder/README.txt ---
+Folder-batch results. Each parsed group has its own subdirectory. Batch_Summary.csv retains group-level rows; Batch_Folder_Summary.csv combines groups within each folder. Equivalent Multi files contain combination patterns.
+--- Volumetric Colocalization/Folder/root/Multi/root_C1_A_Multi_Objects.csv ---
+Label,B Coloc,B Partner,C Coloc,C Partner,Targets Hit
+1,1,8,1,7,2
+2,1,8,1,7,2
+--- Volumetric Colocalization/Folder/root/Multi/root_C2_B_Multi_Objects.csv ---
+Label,A Coloc,A Partner,C Coloc,C Partner,Targets Hit
+8,1,1,1,7,2
+--- Volumetric Colocalization/Folder/root/Multi/root_C3_C_Multi_Objects.csv ---
+Label,A Coloc,A Partner,B Coloc,B Partner,Targets Hit
+7,1,1,1,8,2
+--- Volumetric Colocalization/Folder/root/Multi/root_Multi_Summary.csv ---
+Source,Pattern,Count,% of Source
+A,B + C,2,100
+A,None,0,0
+A,— Any —,2,100
+B,A + C,1,100
+B,None,0,0
+B,— Any —,1,100
+C,A + B,1,100
+C,None,0,0
+C,— Any —,1,100
+--- Volumetric Colocalization/Folder/root/Objects/root_Bounding_Box_Summary.csv ---
+Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Median %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+A,B,A -> B,BBColoc,2,100.000,100.000,25,2,100,NaN
+A,B,A -> B,BB-CPC,2,100.000,100.000,NaN,2,100,NaN
+A,B,A -> B,BBVolColoc,2,75.000,75.000,25,2,100,75.000
+B,A,B -> A,BBColoc,1,66.667,66.667,75,0,0,NaN
+B,A,B -> A,BB-CPC,1,100.000,100.000,NaN,1,100,NaN
+B,A,B -> A,BBVolColoc,1,66.667,66.667,75,0,0,100.000
+A,C,A -> C,BBColoc,2,75.000,75.000,25,2,100,NaN
+A,C,A -> C,BB-CPC,2,100.000,100.000,NaN,2,100,NaN
+A,C,A -> C,BBVolColoc,2,75.000,75.000,25,2,100,75.000
+C,A,C -> A,BBColoc,1,50.000,50.000,30,1,100,NaN
+C,A,C -> A,BB-CPC,1,100.000,100.000,NaN,1,100,NaN
+C,A,C -> A,BBVolColoc,1,50.000,50.000,30,1,100,100.000
+B,C,B -> C,BBColoc,1,66.667,66.667,75,0,0,NaN
+B,C,B -> C,BB-CPC,1,100.000,100.000,NaN,1,100,NaN
+B,C,B -> C,BBVolColoc,1,66.667,66.667,75,0,0,66.667
+C,B,C -> B,BBColoc,1,100.000,100.000,30,1,100,NaN
+C,B,C -> B,BB-CPC,1,100.000,100.000,NaN,1,100,NaN
+C,B,C -> B,BBVolColoc,1,50.000,50.000,30,1,100,50.000
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C2_B_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+A,B,1,2,100,8,25,1,1,8,1,50,50,8,25,1
+A,B,2,1,100,8,25,1,1,8,0,100,100,8,25,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,2,2,1,50,8,1,1,20,1
+A,B,2,1,1,1,100,8,1,1,20,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,8,1,50,50
+A,B,2,8,1,100,50
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C3_C_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+A,C,1,2,50,7,25,1,1,7,0,50,50,7,25,1
+A,C,2,1,100,7,25,1,1,7,1,100,100,7,25,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C3_C_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,C,1,2,2,1,50,7,1,1,20,1
+A,C,2,1,1,1,100,7,1,1,20,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C3_C_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,C,1,7,1,50,50
+A,C,2,7,1,100,50
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C1_A_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+B,A,8,3,66.667,1,75,0,1,1,2,66.667,100,1,75,0
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,A,8,2,2,2,100,1,1,2,40,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,A,8,1,1,50,50
+B,A,8,2,1,50,100
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C3_C_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+B,C,8,3,66.667,7,75,0,1,7,1,66.667,66.667,7,75,0
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C3_C_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,C,8,2,2,1,50,7,1,1,40,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C3_C_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,C,8,7,1,50,50
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C1_A_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+C,A,7,2,50,1,30,1,1,2,2,50,100,1,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+C,A,7,2,2,2,100,1,1,2,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+C,A,7,1,1,50,50
+C,A,7,2,1,50,100
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C2_B_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+C,B,7,2,100,8,30,1,1,8,1,50,50,8,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+C,B,7,2,2,1,50,8,1,1,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C3_C_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+C,B,7,8,1,50,50
+--- Volumetric Colocalization/Folder/root/Objects/root_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,2,75,75,20,2,100
+B,A,B -> A,1,100,100,40,1,100
+A,C,A -> C,2,75,75,20,2,100
+C,A,C -> A,1,100,100,30,1,100
+B,C,B -> C,1,50,50,40,1,100
+C,B,C -> B,1,50,50,30,1,100
+--- Volumetric Colocalization/Maps/README.txt ---
+Reserved for overlap maps. Maps are outside the v0.1.0 scope and are not generated yet.
+--- Volumetric Colocalization/Multi/README.txt ---
+Source-anchored multi-colocalization object patterns and pattern summaries.
+--- Volumetric Colocalization/Objects/README.txt ---
+Per-object directional overlap tables, all-partner detail tables, pair summaries, and optional BBColoc, BB-CPC, and BBVolColoc tables.
+### outputs-disabled
+== preview ==
+1 folder(s), 1 group(s), 1 runnable, 2 files
+
+(root)
+  sample_*.tif (2)
+    sample_A.tif
+    sample_B.tif
+== run ==
+total=1 runnable=1 processed=1 skipped=0 errors=0 hasErrors=false
+output=(null)
+-- summary rows=0 --
+[]
+-- folder-summary rows=0 --
+[]
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=0
+### threshold-boundaries
+== preview ==
+1 folder(s), 1 group(s), 1 runnable, 2 files
+
+(root)
+  sample_*.tif (2)
+    sample_A.tif
+    sample_B.tif
+== run ==
+total=1 runnable=1 processed=1 skipped=0 errors=0 hasErrors=false
+output=Volumetric Colocalization
+-- summary rows=1 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|sample|A|B|A -> B|2|75|75|0|2|100
+-- folder-summary rows=1 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|2|75|0|2|100
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=3 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Method, Object Count, Mean %, Median %, Threshold %, Positive Count, Positive %, Mean Total Fill %]
+0:|(root)|sample|A|B|A -> B|BBColoc|2|75|75|0|2|100|NaN
+1:|(root)|sample|A|B|A -> B|BB-CPC|2|50|50|NaN|1|50|NaN
+2:|(root)|sample|A|B|A -> B|BBVolColoc|2|75|75|0|2|100|75
+-- folder-bounding rows=3 --
+[Folder, Source Channel, Partner Channel, Direction, Method, Object Count, Mean %, Threshold %, Positive Count, Positive %, Mean Total Fill %]
+0:|(root)|A|B|A -> B|BBColoc|2|75|0|2|100|NaN
+1:|(root)|A|B|A -> B|BB-CPC|2|50|NaN|1|50|NaN
+2:|(root)|A|B|A -> B|BBVolColoc|2|75|0|2|100|75
+== output-tree ==
+files=13
+--- Volumetric Colocalization/Folder/Batch_Bounding_Box_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Median %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+(root),sample,A,B,A -> B,BBColoc,2,75,75,0,2,100,NaN
+(root),sample,A,B,A -> B,BB-CPC,2,50,50,NaN,1,50,NaN
+(root),sample,A,B,A -> B,BBVolColoc,2,75,75,0,2,100,75
+--- Volumetric Colocalization/Folder/Batch_Folder_Bounding_Box_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+(root),A,B,A -> B,BBColoc,2,75,0,2,100,NaN
+(root),A,B,A -> B,BB-CPC,2,50,NaN,1,50,NaN
+(root),A,B,A -> B,BBVolColoc,2,75,0,2,100,75
+--- Volumetric Colocalization/Folder/Batch_Folder_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),A,B,A -> B,2,75,0,2,100
+--- Volumetric Colocalization/Folder/Batch_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),sample,A,B,A -> B,2,75,75,0,2,100
+--- Volumetric Colocalization/Folder/README.txt ---
+Folder-batch results. Each parsed group has its own subdirectory. Batch_Summary.csv retains group-level rows; Batch_Folder_Summary.csv combines groups within each folder. Equivalent Multi files contain combination patterns.
+--- Volumetric Colocalization/Folder/sample/Objects/sample_Bounding_Box_Summary.csv ---
+Source Channel,Partner Channel,Direction,Method,Object Count,Mean %,Median %,Threshold %,Positive Count,Positive %,Mean Total Fill %
+A,B,A -> B,BBColoc,2,75,75,0,2,100,NaN
+A,B,A -> B,BB-CPC,2,50,50,NaN,1,50,NaN
+A,B,A -> B,BBVolColoc,2,75,75,0,2,100,75
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Bounding_Boxes.csv ---
+Source Channel,Partner Channel,Source Label,Source Box Volume (voxels),BBColoc Best Box Overlap %,BBColoc Partner,BBColoc Threshold %,BBColoc,BB-CPC Coloc,BB-CPC Partner,BB-CPC Contains Count,BBVolColoc Best Fill %,BBVolColoc Total Fill %,BBVolColoc Partner,BBVolColoc Threshold %,BBVolColoc
+A,B,1,2,50,9,0,1,0,0,1,50,50,9,0,1
+A,B,2,2,100,8,0,1,1,8,1,100,100,8,0,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,2,2,1,50,9,1,1,0,1
+A,B,2,2,2,2,100,8,2,1,0,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,9,1,50,100
+A,B,2,8,2,100,100
+--- Volumetric Colocalization/Folder/sample/Objects/sample_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,2,75,75,0,2,100
+--- Volumetric Colocalization/Maps/README.txt ---
+Reserved for overlap maps. Maps are outside the v0.1.0 scope and are not generated yet.
+--- Volumetric Colocalization/Multi/README.txt ---
+Source-anchored multi-colocalization object patterns and pattern summaries.
+--- Volumetric Colocalization/Objects/README.txt ---
+Per-object directional overlap tables, all-partner detail tables, pair summaries, and optional BBColoc, BB-CPC, and BBVolColoc tables.
+### degenerate
+== preview ==
+1 folder(s), 4 group(s), 4 runnable, 8 files
+
+(root)
+  disjoint_*.tif (2)
+    disjoint_A.tif
+    disjoint_B.tif
+  empty_*.tif (2)
+    empty_A.tif
+    empty_B.tif
+  match_*.tif (2)
+    match_A.tif
+    match_B.tif
+  single_*.tif (2)
+    single_A.tif
+    single_B.tif
+== run ==
+total=4 runnable=4 processed=4 skipped=0 errors=0 hasErrors=false
+output=(null)
+-- summary rows=8 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|disjoint|A|B|A -> B|1|0|0|30|0|0
+1:|(root)|disjoint|B|A|B -> A|1|0|0|30|0|0
+2:|(root)|empty|A|B|A -> B|0|0|0|30|0|0
+3:|(root)|empty|B|A|B -> A|0|0|0|30|0|0
+4:|(root)|match|A|B|A -> B|1|100|100|30|1|100
+5:|(root)|match|B|A|B -> A|1|100|100|30|1|100
+6:|(root)|single|A|B|A -> B|1|100|100|30|1|100
+7:|(root)|single|B|A|B -> A|1|100|100|30|1|100
+-- folder-summary rows=2 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|3|66.667|30|2|66.667
+1:|(root)|B|A|B -> A|3|66.667|30|2|66.667
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=0
+### errors-and-skips
+== preview ==
+1 folder(s), 4 group(s), 2 runnable, 11 files
+
+(root)
+  bad_*.tif (2)
+    bad_A.tif
+    bad_B.tif
+  good_*.tif (2)
+    good_A.tif
+    good_B.tif
+  large_*.tif (6) - SKIP
+    large_C1.tif
+    large_C2.tif
+    large_C3.tif
+    large_C4.tif
+    large_C5.tif
+    large_C6.tif
+  lonely_*.tif (1) - SKIP
+    lonely_A.tif
+== run ==
+total=4 runnable=2 processed=1 skipped=2 errors=1 hasErrors=true
+output=(null)
+-- summary rows=2 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|good|A|B|A -> B|1|50|50|30|1|100
+1:|(root)|good|B|A|B -> A|1|100|100|30|1|100
+-- folder-summary rows=2 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|1|50|30|1|100
+1:|(root)|B|A|B -> A|1|100|30|1|100
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=0
+### optional-group
+== preview ==
+1 folder(s), 1 group(s), 1 runnable, 2 files
+
+(root)
+  sample_*.tif (2)
+    sample_A.tif
+    sample_B.tif
+== run ==
+total=1 runnable=1 processed=1 skipped=0 errors=0 hasErrors=false
+output=Volumetric Colocalization
+-- summary rows=2 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|sample|A|B|A -> B|1|100|100|30|1|100
+1:|(root)|sample|B|A|B -> A|1|100|100|30|1|100
+-- folder-summary rows=2 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|1|100|30|1|100
+1:|(root)|B|A|B -> A|1|100|30|1|100
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=11
+--- Volumetric Colocalization/Folder/Batch_Folder_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),A,B,A -> B,1,100,30,1,100
+(root),B,A,B -> A,1,100,30,1,100
+--- Volumetric Colocalization/Folder/Batch_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),sample,A,B,A -> B,1,100,100,30,1,100
+(root),sample,B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Folder/README.txt ---
+Folder-batch results. Each parsed group has its own subdirectory. Batch_Summary.csv retains group-level rows; Batch_Folder_Summary.csv combines groups within each folder. Equivalent Multi files contain combination patterns.
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,1,1,1,100,2,1,1,30,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,2,1,100,100
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C2_B_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,A,2,1,1,1,100,1,1,1,30,1
+--- Volumetric Colocalization/Folder/sample/Objects/sample_C2_B_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,A,2,1,1,100,100
+--- Volumetric Colocalization/Folder/sample/Objects/sample_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,1,100,100,30,1,100
+B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Maps/README.txt ---
+Reserved for overlap maps. Maps are outside the v0.1.0 scope and are not generated yet.
+--- Volumetric Colocalization/Multi/README.txt ---
+Source-anchored multi-colocalization object patterns and pattern summaries.
+--- Volumetric Colocalization/Objects/README.txt ---
+Per-object directional overlap tables, all-partner detail tables, pair summaries, and optional BBColoc, BB-CPC, and BBVolColoc tables.
+### non-recursive
+== preview ==
+1 folder(s), 1 group(s), 1 runnable, 2 files
+
+(root)
+  root_*.tif (2)
+    root_A.tif
+    root_B.tif
+== run ==
+total=1 runnable=1 processed=1 skipped=0 errors=0 hasErrors=false
+output=Volumetric Colocalization
+-- summary rows=2 --
+[Folder, Group, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Median Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|root|A|B|A -> B|1|100|100|30|1|100
+1:|(root)|root|B|A|B -> A|1|100|100|30|1|100
+-- folder-summary rows=2 --
+[Folder, Source Channel, Partner Channel, Direction, Object Count, Mean Overlap %, Threshold %, Colocalized Count, Colocalized %]
+0:|(root)|A|B|A -> B|1|100|30|1|100
+1:|(root)|B|A|B -> A|1|100|30|1|100
+-- multi rows=0 --
+[]
+-- folder-multi rows=0 --
+[]
+-- bounding rows=0 --
+[]
+-- folder-bounding rows=0 --
+[]
+== output-tree ==
+files=11
+--- Volumetric Colocalization/Folder/Batch_Folder_Summary.csv ---
+Folder,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),A,B,A -> B,1,100,30,1,100
+(root),B,A,B -> A,1,100,30,1,100
+--- Volumetric Colocalization/Folder/Batch_Summary.csv ---
+Folder,Group,Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+(root),root,A,B,A -> B,1,100,100,30,1,100
+(root),root,B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Folder/README.txt ---
+Folder-batch results. Each parsed group has its own subdirectory. Batch_Summary.csv retains group-level rows; Batch_Folder_Summary.csv combines groups within each folder. Equivalent Multi files contain combination patterns.
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C2_B_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+A,B,1,1,1,1,100,2,1,1,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C1_A_in_C2_B_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+A,B,1,2,1,100,100
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C1_A_Objects.csv ---
+Source Channel,Partner Channel,Source Label,Source Volume (voxels),Source Volume (pixel^3),Overlap Voxels,Overlap % of Source,Best Partner Label,Best Partner Overlap Voxels,Partner Count,Threshold %,Colocalized
+B,A,2,1,1,1,100,1,1,1,30,1
+--- Volumetric Colocalization/Folder/root/Objects/root_C2_B_in_C1_A_Partners.csv ---
+Source Channel,Partner Channel,Source Label,Partner Label,Overlap Voxels,Overlap % of Source,Overlap % of Partner
+B,A,2,1,1,100,100
+--- Volumetric Colocalization/Folder/root/Objects/root_Summary.csv ---
+Source Channel,Partner Channel,Direction,Object Count,Mean Overlap %,Median Overlap %,Threshold %,Colocalized Count,Colocalized %
+A,B,A -> B,1,100,100,30,1,100
+B,A,B -> A,1,100,100,30,1,100
+--- Volumetric Colocalization/Maps/README.txt ---
+Reserved for overlap maps. Maps are outside the v0.1.0 scope and are not generated yet.
+--- Volumetric Colocalization/Multi/README.txt ---
+Source-anchored multi-colocalization object patterns and pattern summaries.
+--- Volumetric Colocalization/Objects/README.txt ---
+Per-object directional overlap tables, all-partner detail tables, pair summaries, and optional BBColoc, BB-CPC, and BBVolColoc tables.
+### rejections
+null:java.lang.IllegalArgumentException:Batch parameters must not be null.
+missing-folder:java.lang.IllegalArgumentException:Batch input folder does not exist.
+empty-regex:java.lang.IllegalArgumentException:Batch regular expression must not be empty.
+invalid-regex:java.lang.IllegalArgumentException:Invalid batch regular expression: Unclosed character class near index 1
+([
+ ^
+varying-zero:java.lang.IllegalArgumentException:varying_group must identify one of the regular expression's 2 capture groups.
+varying-too-large:java.lang.IllegalArgumentException:varying_group must identify one of the regular expression's 2 capture groups.
+detail-overlap:java.lang.IllegalArgumentException:Minimum partner-detail overlap must be between 0 and 100 percent.
+threshold:java.lang.IllegalArgumentException:Batch thresholds must be between 0 and 100.
+save-file:java.lang.IllegalArgumentException:Batch save path is not a directory: <workspace>\not-directory
+no-matches:java.lang.IllegalArgumentException:No files matched the batch regular expression.
+parsed-threshold:java.lang.IllegalArgumentException:Threshold for channel A must be between 0 and 100.
