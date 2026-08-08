@@ -56,14 +56,33 @@ public class BatchEquivalenceTest {
         assertEquals("batch corpus changed size", golden.size(), current.size());
 
         List<String> moved = new ArrayList<String>();
+        StringBuilder diagnostics = new StringBuilder();
         for (Map.Entry<String, String> entry : golden.entrySet()) {
             String value = current.get(entry.getKey());
             if (value == null || !entry.getValue().equals(value)) {
                 moved.add(entry.getKey());
+                diagnostics.append('\n').append(entry.getKey()).append(": ")
+                        .append(firstDifference(entry.getValue(), value));
             }
         }
         if (!moved.isEmpty()) {
-            fail("Tier 1 batch output moved in " + moved);
+            fail("Tier 1 batch output moved in " + moved + diagnostics);
         }
+    }
+
+    private static String firstDifference(String expected, String actual) {
+        if (actual == null) return "scenario is missing";
+        String[] expectedLines = expected.split("\n", -1);
+        String[] actualLines = actual.split("\n", -1);
+        int common = Math.min(expectedLines.length, actualLines.length);
+        for (int line = 0; line < common; line++) {
+            if (!expectedLines[line].equals(actualLines[line])) {
+                return "line " + (line + 1)
+                        + " expected <" + expectedLines[line] + ">"
+                        + " but was <" + actualLines[line] + ">";
+            }
+        }
+        return "line count expected " + expectedLines.length
+                + " but was " + actualLines.length;
     }
 }
