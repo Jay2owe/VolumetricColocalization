@@ -133,28 +133,46 @@ jobs:
         run: |
           JAR="release-artifact/Volumetric_Colocalization-0.1.0.jar"
           test -f "$JAR"
-          echo "$RELEASE_SHA256  $JAR" | sha256sum --check --strict
-          ENTRIES="$(unzip -Z1 "$JAR")"
-          MANIFEST="$(unzip -p "$JAR" META-INF/MANIFEST.MF)"
-          grep -Fxq 'META-INF/MANIFEST.MF' <<< "$ENTRIES"
-          grep -Fxq 'plugins.config' <<< "$ENTRIES"
-          grep -Fxq 'volcoloc/Volumetric_Colocalization.class' <<< "$ENTRIES"
-          if grep -q '^sc/fiji/' <<< "$ENTRIES"; then
-            echo "Canonical release artifact contains unrelocated sc/fiji classes."
-            exit 1
-          fi
-          if grep -q '^ij/' <<< "$ENTRIES"; then
-            echo "Canonical release artifact bundles ImageJ classes."
-            exit 1
-          fi
-          grep -q "^Implementation-Build: $RELEASE_COMMIT$" <<< "$MANIFEST"
-          if grep -q '^Class-Path:' <<< "$MANIFEST"; then
-            echo "Canonical release artifact incorrectly declares external class-path jars."
-            exit 1
-          fi
+          python - "$JAR" "$RELEASE_SHA256" "$RELEASE_COMMIT" <<'PY'
+          import hashlib
+          import sys
+          import zipfile
+          from pathlib import Path
+
+          path = Path(sys.argv[1])
+          expected_hash = sys.argv[2].upper()
+          expected_commit = sys.argv[3]
+          actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper()
+          if actual_hash != expected_hash:
+              raise SystemExit(
+                  f"Canonical release SHA-256 mismatch: {actual_hash}")
+
+          with zipfile.ZipFile(path) as archive:
+              entries = set(archive.namelist())
+              required = {
+                  "META-INF/MANIFEST.MF",
+                  "plugins.config",
+                  "volcoloc/Volumetric_Colocalization.class",
+              }
+              missing = sorted(required - entries)
+              if missing:
+                  raise SystemExit(f"Canonical release entries missing: {missing}")
+              if any(name.startswith("sc/fiji/") for name in entries):
+                  raise SystemExit(
+                      "Canonical release contains unrelocated sc/fiji classes")
+              if any(name.startswith("ij/") for name in entries):
+                  raise SystemExit("Canonical release bundles ImageJ classes")
+              manifest = archive.read("META-INF/MANIFEST.MF").decode("UTF-8")
+
+          if f"Implementation-Build: {expected_commit}\r\n" not in manifest:
+              raise SystemExit("Canonical release has the wrong source commit")
+          if "\nClass-Path:" in manifest:
+              raise SystemExit(
+                  "Canonical release declares external class-path jars")
+          print(f"Canonical release SHA-256 verified: {actual_hash}")
+          PY
 
           BUILT="target/Volumetric_Colocalization-0.1.0.jar"
-          echo "Canonical release asset: $(sha256sum "$JAR")"
           echo "Fresh verification build: $(sha256sum "$BUILT")"
 
       - name: Download Fiji
