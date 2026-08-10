@@ -68,9 +68,9 @@ Raw intensity images are not used.
 ## Install from the Fiji update site
 
 In Fiji, choose **Help > Update... > Manage update sites**, add an update site
-named `Volumetric-Colocalization` with this URL, and enable it:
+named `VolumetricColocalization` with this URL, and enable it:
 
-`https://sites.imagej.net/Volumetric-Colocalization/`
+`https://sites.imagej.net/VolumetricColocalization/`
 
 Apply the changes and restart Fiji. The command is then available at:
 

@@ -14,7 +14,7 @@ on:
         type: boolean
         default: false
       confirm_live_upload:
-        description: "Required when dry_run=false: type UPLOAD Volumetric-Colocalization"
+        description: "Required when dry_run=false: type UPLOAD VolumetricColocalization"
         required: false
         type: string
         default: ""
@@ -34,8 +34,8 @@ jobs:
 
     env:
       FIJI_DOWNLOAD_URL: "https://downloads.imagej.net/fiji/latest/fiji-latest-linux64-jdk.zip"
-      IMAGEJ_UPDATE_SITE_NAME: "Volumetric-Colocalization"
-      IMAGEJ_UPDATE_SITE_URL: "https://sites.imagej.net/Volumetric-Colocalization/"
+      IMAGEJ_UPDATE_SITE_NAME: "VolumetricColocalization"
+      IMAGEJ_UPDATE_SITE_URL: "https://sites.imagej.net/VolumetricColocalization/"
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: "v0.1.0"
       RELEASE_COMMIT: "f87733e1ccf6886cbed929b740db9435ce5f51ec"
@@ -52,7 +52,7 @@ jobs:
       ARTIFACT_NAME: ""
       REPLACE_GLOB: "plugins/Volumetric_Colocalization-*.jar"
       UPLOAD_MODE: "single-file"
-      LIVE_UPLOAD_CONFIRMATION: "UPLOAD Volumetric-Colocalization"
+      LIVE_UPLOAD_CONFIRMATION: "UPLOAD VolumetricColocalization"
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
       CLEAR_STALE_LOCK: ${{ github.event_name == 'workflow_dispatch' && inputs.clear_stale_lock || 'false' }}
 
