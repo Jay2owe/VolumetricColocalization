@@ -14,6 +14,7 @@ authors:
     email: jamiemalcolm12@gmail.com
 repository-code: "https://github.com/Jay2owe/VolumetricColocalization"
 url: "https://github.com/Jay2owe/VolumetricColocalization"
+doi: "10.5281/zenodo.21933258"
 license: BSD-3-Clause
 version: "0.1.0"
 date-released: "2026-08-08"

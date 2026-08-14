@@ -1,5 +1,7 @@
 # Volumetric Colocalization
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21933257.svg)](https://doi.org/10.5281/zenodo.21933257)
+
 Volumetric Colocalization is an ImageJ/Fiji plugin for measuring how much of
 each segmented object's volume is occupied by objects in another channel. It
 accepts 2–5 label images or ImageJ ROI sets, analyses every channel pair, keeps
@@ -298,8 +300,8 @@ overlap maps.
 
 ## Citation and licence
 
-> Malcolm, J. (2026). Volumetric Colocalization (v0.1.0) [Software].
-> GitHub. https://github.com/Jay2owe/VolumetricColocalization
+> Malcolm, J. (2026). *Volumetric Colocalization* (Version 0.1.0)
+> [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21933258
 
 BSD 3-Clause. See [LICENSE](LICENSE).
 ## Parallel execution
