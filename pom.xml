@@ -14,7 +14,7 @@
 
 	<groupId>io.github.jay2owe</groupId>
 	<artifactId>Volumetric_Colocalization</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 
 	<name>Volumetric Colocalization</name>
 	<description>Directional object-volume overlap for 2–5 ImageJ label images</description>

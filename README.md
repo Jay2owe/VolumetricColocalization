@@ -7,7 +7,7 @@ each segmented object's volume is occupied by objects in another channel. It
 accepts 2–5 label images or ImageJ ROI sets, analyses every channel pair, keeps
 every overlapping partner, and supports reproducible folder batches.
 
-The current release is `0.1.0`.
+The current release is `0.1.1`.
 
 ## What it reports
 
@@ -86,7 +86,7 @@ Requirements: Java 8 or newer and Maven.
 mvn clean test package
 ```
 
-Copy `target/Volumetric_Colocalization-0.1.0.jar` into Fiji's
+Copy `target/Volumetric_Colocalization-0.1.1.jar` into Fiji's
 `plugins/` directory, restart Fiji, then run:
 
 `Plugins > Volumetric Colocalization`
@@ -101,7 +101,12 @@ Choose one of two single-run input modes:
 For folder processing, click **Batch...** in the lower-left corner. The batch
 dialog follows CPC's workflow: provide a filename regular expression, identify
 the capture group containing the channel name, and use **Preview Groups** to
-inspect the complete grouping before running.
+inspect the complete grouping before running. While a batch runs, the status
+bar shows which group it is on; press **Escape** to stop it before the next
+group. Groups already analysed keep their saved outputs and appear in the batch
+tables, and the report says the batch was stopped.
+
+Escape closes any of the dialogs as Cancel.
 
 Each channel has its own outgoing overlap threshold. The partner-row filter is
 the percentage of the source object contributed by that individual partner and
@@ -254,9 +259,11 @@ open the file with **Data > From Text/CSV** and pick UTF-8 instead.
 
 ## Algorithm
 
-The engine scans the aligned label stacks once. It counts every label's voxels
-and every non-background `(A label, B label)` intersection using primitive
-open-addressing maps, avoiding per-voxel boxed objects. For each source object,
+The engine scans the aligned label stacks once, reading each slice straight
+from the stack's pixel array. It counts every label's voxels, in a plain array
+for labels below 65,536, and adds every non-background `(A label, B label)`
+intersection as one run of neighbouring voxels that share both labels, walking
+only the foreground of the sparser channel, with no per-voxel boxed objects. For each source object,
 all partner intersections are summed to obtain occupied volume. The full pair
 list remains available for detail output; only the separate “best partner”
 column is reduced to one label.
@@ -300,8 +307,8 @@ overlap maps.
 
 ## Citation and licence
 
-> Malcolm, J. (2026). *Volumetric Colocalization* (Version 0.1.0)
-> [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21933258
+> Malcolm, J. (2026). *Volumetric Colocalization* (Version 0.1.1)
+> [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21933257
 
 BSD 3-Clause. See [LICENSE](LICENSE).
 ## Parallel execution

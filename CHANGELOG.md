@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.1.1 - 2026-09-30
+
+Faster, with every measured value unchanged bit for bit, plus three fixes to
+the dialogs and the folder batch found by driving them in a real Fiji.
+
+### Performance
+
+- Embeds `volcoloc-core` 0.2.0 (was 0.1.0). The engine now reads each slice
+  once from the stack's pixel array, counts labels below 65,536 in a plain
+  array, and adds pair overlaps as runs of neighbouring voxels instead of one
+  hash-map lookup per voxel per channel pair.
+- Measured end to end, as a user runs it: open three label TIFFs, analyse
+  every pair in both directions with all tables and the three bounding-box
+  analyses, and write every CSV. On a synthetic 3-channel
+  1024 x 1024 x 40 stack with 8,000 ellipsoidal objects per channel, the
+  median of 5 runs went from 6.7 s with 0.1.0 to 4.1 s with 0.1.1: **1.6x
+  faster**. Opening the images and writing the tables do not speed up, so
+  the gain is smaller than the core's own 2.6x.
+- No output changed: all 24 CSVs of that run (110,299 rows) are
+  byte-identical between 0.1.0 and 0.1.1, and the 299 golden dumps pass
+  unchanged.
+
+### Fixes
+
+- **Escape** now closes the mode, label-image, ROI-set and folder-batch
+  dialogs as Cancel, as it does in any ImageJ dialog. It did nothing before.
+- **Macro Recorder**: a dialog run recorded its full
+  `run("Volumetric Colocalization", "...")` line and then a second, bare
+  `run("Volumetric Colocalization");` that reopens the dialog when the macro
+  is replayed. Only the full line is recorded now, and a cancelled dialog
+  records nothing.
+- **Stopping a folder batch**: Escape was ignored and every group ran. It now
+  stops the batch before the next group. Groups already analysed keep their
+  saved outputs and appear in the batch tables; the report and the status
+  bar say the batch was stopped, and `VolColocBatchResult.isCancelled()`
+  reports it to Java callers. An Escape pressed before a batch starts is
+  ignored. While a batch runs, the status bar names the group being analysed
+  (group N of M) with a progress bar.
+
 ## 0.1.0 - 2026-08-08
 
 ### Architecture — split into an embeddable engine and a thin plugin
