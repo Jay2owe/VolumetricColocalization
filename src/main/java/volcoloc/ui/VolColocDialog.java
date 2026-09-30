@@ -10,17 +10,21 @@ package volcoloc.ui;
 
 import sc.fiji.oc3d.core.ui.ToggleSwitch;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -33,6 +37,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +99,11 @@ public class VolColocDialog {
         });
         ok.addActionListener(event -> {
             canceled = false;
+            dialog.dispose();
+        });
+        // Escape means Cancel, as it does in every ImageJ GenericDialog.
+        bindEscape(dialog.getRootPane(), () -> {
+            canceled = true;
             dialog.dispose();
         });
         buttons.add(cancel);
@@ -308,6 +319,29 @@ public class VolColocDialog {
 
     public void dispose() {
         dialog.dispose();
+    }
+
+    /** The Swing window, for tests. */
+    JDialog window() {
+        return dialog;
+    }
+
+    /**
+     * Runs {@code cancel} when Escape is pressed anywhere in the window,
+     * whichever field has the keyboard focus.
+     */
+    static void bindEscape(JRootPane root, Runnable cancel) {
+        String key = "volcoloc.cancel";
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), key);
+        root.getActionMap().put(key, new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                cancel.run();
+            }
+        });
     }
 
     public boolean showDialog() {

@@ -64,6 +64,11 @@ public class Volumetric_Colocalization implements PlugIn {
     }
 
     private void runInteractive() throws Exception {
+        // This plugin records its own complete run("...", "options") line in
+        // record(). Without this, ImageJ also appends a bare
+        // run("Volumetric Colocalization"); when the command returns, which
+        // reopens the dialog on replay; a cancelled dialog then records nothing.
+        if (Recorder.record) Recorder.setCommand(null);
         VolColocDialog modeDialog = new VolColocDialog(TITLE);
         modeDialog.addHeader("Input");
         modeDialog.addChoice("Input mode",
@@ -384,8 +389,17 @@ public class Volumetric_Colocalization implements PlugIn {
         String message = result.getProcessedGroups() + " processed, "
                 + result.getSkippedGroups() + " skipped, "
                 + result.getErrorGroups() + " error(s).";
-        IJ.log(TITLE + " batch complete: " + message);
-        IJ.showStatus(TITLE + ": batch complete.");
+        if (result.isCancelled()) {
+            message = "Stopped with Escape after "
+                    + (result.getProcessedGroups() + result.getErrorGroups())
+                    + " of " + result.getRunnableGroups() + " group(s): "
+                    + message;
+            IJ.log(TITLE + " batch stopped: " + message);
+            IJ.showStatus(TITLE + ": batch stopped.");
+        } else {
+            IJ.log(TITLE + " batch complete: " + message);
+            IJ.showStatus(TITLE + ": batch complete.");
+        }
         if (!GraphicsEnvironment.isHeadless() && !hideDisplay) {
             displayBatch(result);
             IJ.showMessage(TITLE, message

@@ -22,6 +22,7 @@ public final class VolColocBatchResult {
     private final int processedGroups;
     private final int skippedGroups;
     private final int errorGroups;
+    private final boolean cancelled;
     private final File outputDirectory;
     private final ResultsTable summaryTable;
     private final ResultsTable folderSummaryTable;
@@ -32,7 +33,8 @@ public final class VolColocBatchResult {
 
     VolColocBatchResult(int totalGroups, int runnableGroups,
                         int processedGroups, int skippedGroups,
-                        int errorGroups, File outputDirectory,
+                        int errorGroups, boolean cancelled,
+                        File outputDirectory,
                         ResultsTable summaryTable,
                         ResultsTable folderSummaryTable,
                         ResultsTable multiSummaryTable,
@@ -44,6 +46,7 @@ public final class VolColocBatchResult {
         this.processedGroups = processedGroups;
         this.skippedGroups = skippedGroups;
         this.errorGroups = errorGroups;
+        this.cancelled = cancelled;
         this.outputDirectory = outputDirectory;
         this.summaryTable = summaryTable;
         this.folderSummaryTable = folderSummaryTable;
@@ -71,6 +74,11 @@ public final class VolColocBatchResult {
 
     public int getErrorGroups() {
         return errorGroups;
+    }
+
+    /** True when Escape stopped the batch before every runnable group ran. */
+    public boolean isCancelled() {
+        return cancelled;
     }
 
     public File getOutputDirectory() {

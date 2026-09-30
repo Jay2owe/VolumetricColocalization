@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -45,7 +46,22 @@ public final class VolColocBatchRunner {
         return previewGroups(discover(parameters, compiled.pattern));
     }
 
+    /**
+     * Runs the batch. Pressing Escape in ImageJ stops it before the next
+     * group; groups already analysed keep their saved outputs and appear in
+     * the aggregate tables, and {@link VolColocBatchResult#isCancelled()}
+     * reports the stop. An Escape pressed before the batch starts is ignored.
+     */
     public static VolColocBatchResult run(VolColocBatchParameters parameters) {
+        IJ.resetEscape();
+        VolColocBatchResult result = run(parameters, IJ::escapePressed);
+        if (result.isCancelled()) IJ.resetEscape();
+        return result;
+    }
+
+    /** As {@link #run(VolColocBatchParameters)}, asking {@code stop} before each group. */
+    static VolColocBatchResult run(VolColocBatchParameters parameters,
+                                   BooleanSupplier stop) {
         Compiled compiled = compile(parameters);
         Map<String, Map<String, List<File>>> folders =
                 discover(parameters, compiled.pattern);
@@ -69,6 +85,8 @@ public final class VolColocBatchRunner {
         int processed = 0;
         int skipped = 0;
         int errors = 0;
+        int attempted = 0;
+        boolean cancelled = false;
         ResultsTable batchSummary = new ResultsTable();
         ResultsTable batchMultiSummary = new ResultsTable();
         ResultsTable batchBoundingBoxSummary = new ResultsTable();
@@ -91,6 +109,7 @@ public final class VolColocBatchRunner {
             }
         }
 
+        groups:
         for (Map.Entry<String, Map<String, List<File>>> folder
                 : folders.entrySet()) {
             Map<String, String> groupNames =
@@ -107,6 +126,11 @@ public final class VolColocBatchRunner {
                             + " images; expected 2-5).");
                     continue;
                 }
+                if (stop.getAsBoolean()) {
+                    cancelled = true;
+                    break groups;
+                }
+                attempted++;
                 List<ImagePlus> opened = new ArrayList<ImagePlus>();
                 VolColocResult result = null;
                 try {
@@ -138,6 +162,13 @@ public final class VolColocBatchRunner {
                                 parameters.getBoundingBoxThresholdsByChannel(),
                                 VolColocParameters.DEFAULT_BOUNDING_BOX_THRESHOLD_PERCENT)));
                     }
+                    // After opening: the opener's own "Reading" status and
+                    // bar would otherwise replace these at once, and the
+                    // analysis that follows is the long part.
+                    IJ.showStatus("Volumetric Colocalization: batch group "
+                            + attempted + " of " + runnable
+                            + " (" + groupName + ")");
+                    IJ.showProgress((attempted - 0.5) / runnable);
 
                     VolColocParameters analysisParameters =
                             VolColocParameters.builder(opened)
@@ -208,6 +239,7 @@ public final class VolColocBatchRunner {
             }
         }
 
+        IJ.showProgress(1.0);
         ResultsTable folderSummary = batchSummary.getCounter() == 0
                 ? new ResultsTable()
                 : buildFolderSummary(batchSummary);
@@ -254,7 +286,8 @@ public final class VolColocBatchRunner {
             }
         }
         return new VolColocBatchResult(
-                total, runnable, processed, skipped, errors, outputRoot,
+                total, runnable, processed, skipped, errors, cancelled,
+                outputRoot,
                 batchSummary, folderSummary,
                 batchMultiSummary, folderMultiSummary,
                 batchBoundingBoxSummary, folderBoundingBoxSummary);

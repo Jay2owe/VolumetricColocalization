@@ -517,6 +517,57 @@ public class VolColocBatchRunnerTest {
         return Double.NaN;
     }
 
+    @Test
+    public void stopsBetweenGroupsWhenCancelled() throws Exception {
+        File labels = temporary.newFolder("cancelled");
+        for (String group : new String[]{"g1", "g2", "g3"}) {
+            save(labels, group + "_A.tif", 1, 1, 0, 0);
+            save(labels, group + "_B.tif", 2, 0, 2, 0);
+        }
+        VolColocBatchParameters parameters = VolColocBatchParameters.builder(
+                        labels, "(.+)_([^_]+)[.](?:tif|tiff)$", 2)
+                .recursive(false)
+                .autoSave(true)
+                .saveDirectory(labels)
+                .build();
+        final int[] asked = {0};
+
+        // Escape arrives while the first group runs: the check before the
+        // second group sees it.
+        VolColocBatchResult result = VolColocBatchRunner.run(
+                parameters, () -> ++asked[0] > 1);
+
+        assertTrue(result.isCancelled());
+        assertEquals(3, result.getRunnableGroups());
+        assertEquals(1, result.getProcessedGroups());
+        assertEquals(2, result.getSummaryTable().getCounter());
+        assertTrue(new File(result.getOutputDirectory(),
+                "Folder/g1/Objects").isDirectory());
+        assertFalse(new File(result.getOutputDirectory(), "Folder/g2").exists());
+        assertFalse(new File(result.getOutputDirectory(), "Folder/g3").exists());
+    }
+
+    @Test
+    public void anEscapePressedBeforeTheBatchDoesNotStopIt() throws Exception {
+        File labels = temporary.newFolder("stale-escape");
+        save(labels, "g1_A.tif", 1, 1, 0, 0);
+        save(labels, "g1_B.tif", 2, 0, 2, 0);
+        save(labels, "g2_A.tif", 1, 1, 0, 0);
+        save(labels, "g2_B.tif", 2, 0, 2, 0);
+        VolColocBatchParameters parameters = VolColocBatchParameters.builder(
+                        labels, "(.+)_([^_]+)[.](?:tif|tiff)$", 2)
+                .recursive(false)
+                .build();
+        IJ.setKeyDown(java.awt.event.KeyEvent.VK_ESCAPE);
+        try {
+            VolColocBatchResult result = VolColocBatchRunner.run(parameters);
+            assertFalse(result.isCancelled());
+            assertEquals(2, result.getProcessedGroups());
+        } finally {
+            IJ.resetEscape();
+        }
+    }
+
     private static void save(File folder, String name, int... labels) {
         ShortProcessor processor = new ShortProcessor(labels.length, 1);
         for (int i = 0; i < labels.length; i++) processor.set(i, labels[i]);
