@@ -37,9 +37,9 @@ jobs:
       IMAGEJ_UPDATE_SITE_NAME: "VolumetricColocalization"
       IMAGEJ_UPDATE_SITE_URL: "https://sites.imagej.net/VolumetricColocalization/"
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: "v0.1.0"
-      RELEASE_COMMIT: "f87733e1ccf6886cbed929b740db9435ce5f51ec"
-      RELEASE_SHA256: "E3E66523C9BAA55ABA9684B5E6ABC5957EFB1C380B699591889F1E2F5ADA5CE1"
+      RELEASE_TAG: "v0.1.1"
+      RELEASE_COMMIT: "25cc8f84012ed8856bcf8118cf287dbbd270f912"
+      RELEASE_SHA256: "2124F90C3BDBABC72A9A7EA343E556F49D3F583CEDE1A46F9DE36F8765786BC1"
       OC3D_CORE_REPO: "Jay2owe/oc3d-core"
       OC3D_CORE_REF: "v0.1.0"
       VOLCOLOC_CORE_REPO: "Jay2owe/volcoloc-core"
@@ -47,7 +47,7 @@ jobs:
       IMAGEJ_UPLOAD_USER: ${{ secrets.IMAGEJ_UPLOAD_USER }}
       IMAGEJ_UPLOAD_PASSWORD: ${{ secrets.IMAGEJ_UPLOAD_PASSWORD }}
       DEFAULT_UPLOAD_USER: ""
-      ARTIFACT_GLOB: "release-artifact/Volumetric_Colocalization-0.1.0.jar"
+      ARTIFACT_GLOB: "release-artifact/Volumetric_Colocalization-0.1.1.jar"
       INSTALL_DIR: "plugins"
       ARTIFACT_NAME: ""
       REPLACE_GLOB: "plugins/Volumetric_Colocalization-*.jar"
@@ -125,13 +125,13 @@ jobs:
           mkdir -p release-artifact
           gh release download "$RELEASE_TAG" \
             --repo "$GITHUB_REPOSITORY" \
-            --pattern "Volumetric_Colocalization-0.1.0.jar" \
+            --pattern "Volumetric_Colocalization-0.1.1.jar" \
             --dir release-artifact
 
       - name: Verify canonical release artifact
         shell: bash
         run: |
-          JAR="release-artifact/Volumetric_Colocalization-0.1.0.jar"
+          JAR="release-artifact/Volumetric_Colocalization-0.1.1.jar"
           test -f "$JAR"
           python - "$JAR" "$RELEASE_SHA256" "$RELEASE_COMMIT" <<'PY'
           import hashlib
@@ -172,7 +172,7 @@ jobs:
           print(f"Canonical release SHA-256 verified: {actual_hash}")
           PY
 
-          BUILT="target/Volumetric_Colocalization-0.1.0.jar"
+          BUILT="target/Volumetric_Colocalization-0.1.1.jar"
           echo "Fresh verification build: $(sha256sum "$BUILT")"
 
       - name: Download Fiji
@@ -291,5 +291,5 @@ jobs:
         with:
           name: volumetric-colocalization-uploaded-artifact
           path: |
-            release-artifact/Volumetric_Colocalization-0.1.0.jar
+            release-artifact/Volumetric_Colocalization-0.1.1.jar
           if-no-files-found: error
