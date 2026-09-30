@@ -92,6 +92,10 @@ jobs:
       - name: Upload release jar
         uses: actions/upload-artifact@v4
         with:
-          name: Volumetric_Colocalization-0.1.0
-          path: plugin/target/Volumetric_Colocalization-0.1.0.jar
+          # Version-free, so a version bump cannot break this step.
+          name: Volumetric_Colocalization-jar
+          path: |
+            plugin/target/Volumetric_Colocalization-*.jar
+            !plugin/target/*-sources.jar
+            !plugin/target/*-tests.jar
           if-no-files-found: error
