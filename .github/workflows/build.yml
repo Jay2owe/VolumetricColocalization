@@ -15,7 +15,7 @@ env:
   OC3D_CORE_REPO: Jay2owe/oc3d-core
   OC3D_CORE_REF: v0.1.0
   VOLCOLOC_CORE_REPO: Jay2owe/volcoloc-core
-  VOLCOLOC_CORE_REF: v0.1.0
+  VOLCOLOC_CORE_REF: v0.2.0
 
 jobs:
   test:

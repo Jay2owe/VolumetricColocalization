@@ -115,7 +115,7 @@
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>volcoloc-core</artifactId>
-			<version>0.1.0</version>
+			<version>0.2.0</version>
 		</dependency>
 
 		<!-- Shared ROI/label ingest, regex grouping, and dialog widgets. -->

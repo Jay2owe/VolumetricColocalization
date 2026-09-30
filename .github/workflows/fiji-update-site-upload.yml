@@ -43,7 +43,7 @@ jobs:
       OC3D_CORE_REPO: "Jay2owe/oc3d-core"
       OC3D_CORE_REF: "v0.1.0"
       VOLCOLOC_CORE_REPO: "Jay2owe/volcoloc-core"
-      VOLCOLOC_CORE_REF: "v0.1.0"
+      VOLCOLOC_CORE_REF: "v0.2.0"
       IMAGEJ_UPLOAD_USER: ${{ secrets.IMAGEJ_UPLOAD_USER }}
       IMAGEJ_UPLOAD_PASSWORD: ${{ secrets.IMAGEJ_UPLOAD_PASSWORD }}
       DEFAULT_UPLOAD_USER: ""
